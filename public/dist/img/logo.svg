@@ -1,0 +1,15 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 232 68" width="232" height="68">
+	<title>New Project</title>
+	<defs>
+		<image  width="232" height="68" id="img1" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOgAAABEAQMAAACxueuuAAAAAXNSR0IB2cksfwAAAANQTFRFAAAAp3o92gAAAAF0Uk5TAEDm2GYAAAAXSURBVHicY2AYBaNgFIyCUTAKRsFIAQAH+AABL0/vgwAAAABJRU5ErkJggg=="/>
+	</defs>
+	<style>
+		tspan { white-space:pre } 
+		.t0 { font-size: 150px;fill: #ffffff;font-weight: 400;font-family: "Dangrek-Regular", "Dangrek" } 
+	</style>
+	<use id="Background" href="#img1" x="0" y="0"/>
+	<text id="AtoroTech" style="transform: matrix(.207,.001,-0.001,.207,-1.255,41.477)" >
+		<tspan x="0" y="0" class="t0">M</tspan><tspan  y="0" class="t0">y</tspan><tspan  y="0" class="t0">t</tspan><tspan  y="0" class="t0">h</tspan><tspan  y="0" class="t0">i</tspan><tspan  y="0" class="t0">c</tspan><tspan  y="0" class="t0">a</tspan><tspan  y="0" class="t0">l</tspan><tspan  y="0" class="t0"> </tspan><tspan  y="0" class="t0">S</tspan><tspan  y="0" class="t0">y</tspan><tspan  y="0" class="t0">s</tspan><tspan  y="0" class="t0">t</tspan><tspan  y="0" class="t0">e</tspan><tspan  y="0" class="t0">m</tspan><tspan  y="0" class="t0">s</tspan><tspan  y="0" class="t0">
+</tspan>
+	</text>
+</svg>

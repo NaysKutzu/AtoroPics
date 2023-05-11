@@ -1,0 +1,26 @@
+{
+    "name": "atorotech/atoropic",
+    "description": "A ShareX server/client area built in php",
+    "type": "project",
+    "require": {
+        "vlucas/phpdotenv": "^5.5",
+        "guzzlehttp/guzzle": "^7.5",
+        "ecoal95/php-router": "^1.0",
+        "phpmailer/phpmailer": "^6.8"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tye",
+            "email": "thayagan21@gmail.com",
+            "homepage": "https://github.com/snyderwillcode",
+            "role": "Lead Developer"
+        },
+        {
+            "name": "NaysKutzu",
+            "email": "nayskutzu@gmail.com",
+            "homepage": "https://github.com/NaysKutzu",
+            "role": "Developer"
+        }
+    ]
+}
