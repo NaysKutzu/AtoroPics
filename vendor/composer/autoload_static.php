@@ -18,10 +18,6 @@ class ComposerStaticInite7a9658df2091dc4fa2d8fb818f07897
     );
 
     public static $prefixLengthsPsr4 = array (
-        'W' => 
-        array (
-            'WebSocket\\' => 10,
-        ),
         'S' => 
         array (
             'Symfony\\Polyfill\\Php80\\' => 23,
@@ -30,7 +26,6 @@ class ComposerStaticInite7a9658df2091dc4fa2d8fb818f07897
         ),
         'P' => 
         array (
-            'Psr\\Log\\' => 8,
             'Psr\\Http\\Message\\' => 17,
             'Psr\\Http\\Client\\' => 16,
             'PhpOption\\' => 10,
@@ -50,10 +45,6 @@ class ComposerStaticInite7a9658df2091dc4fa2d8fb818f07897
     );
 
     public static $prefixDirsPsr4 = array (
-        'WebSocket\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/textalk/websocket/lib',
-        ),
         'Symfony\\Polyfill\\Php80\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-php80',
@@ -65,10 +56,6 @@ class ComposerStaticInite7a9658df2091dc4fa2d8fb818f07897
         'Symfony\\Polyfill\\Ctype\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-ctype',
-        ),
-        'Psr\\Log\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/psr/log/src',
         ),
         'Psr\\Http\\Message\\' => 
         array (

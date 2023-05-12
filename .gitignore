@@ -1,0 +1,7 @@
+/vendor/
+/apache/
+apache_stop.bat
+apache_start.bat
+/public/storage/json/*
+/public/storage/uploads/*
+.env

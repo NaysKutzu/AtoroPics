@@ -36,8 +36,8 @@ $result = mysqli_query($conn, "SELECT * FROM imgs WHERE owner_key = '" . mysqli_
     <meta name="mobile-web-app-capable" content="yes"/>
     <meta name="HandheldFriendly" content="True"/>
     <meta name="MobileOptimized" content="320"/>
-    <link rel="icon" href="<?php  $_ENV['APP_LOGO']?>" type="image/x-icon"/>
-    <link rel="shortcut icon" href="<?php  $_ENV['APP_LOGO']?>" type="image/x-icon"/>
+    <link rel="icon" href="<?=  $settings['app_logo']?>" type="image/x-icon"/>
+    <link rel="shortcut icon" href="<?=  $settings['app_logo']?>" type="image/x-icon"/>
     <meta name="description" content="Mythical Images comes with free hosting for your images. Get started today for free at MythicalSystems.xyz"/>
     <meta name="twitter:image:src" content="https://cdn.discordapp.com/attachments/1037824534880993310/1106309882677825696/New.png">
     <meta name="twitter:site" content="@Mythical_ui">
@@ -80,7 +80,7 @@ $result = mysqli_query($conn, "SELECT * FROM imgs WHERE owner_key = '" . mysqli_
           </button>
           <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
             <a >
-              <?php echo $_ENV['APP_NAME'] ?>
+            <?= $settings['app_name']?>
             </a>
           </h1>
           <div class="navbar-nav flex-row order-md-last">
@@ -190,8 +190,8 @@ $result = mysqli_query($conn, "SELECT * FROM imgs WHERE owner_key = '" . mysqli_
               <div class="col-lg-auto ms-lg-auto">
                 <ul class="list-inline list-inline-dots mb-0">
                 <li class="list-inline-item">
-                    <a href="./changelog.html" class="link-secondary" rel="noopener">
-                      v1.3.4
+                    <a href="" class="link-secondary" rel="noopener">
+                      v1.3.5
                     </a>
                   </li>
                 </ul>

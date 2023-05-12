@@ -24,10 +24,9 @@ if (isset($_POST['submit'])) {
   $title = $_POST['title'];
   $desc = $_POST['desc'];
   $colour =  $_POST['colour'];
-
-  $sql = "UPDATE users SET embed_title='$title', embed_desc='$desc', embed_theme='$colour' WHERE api_key = '" . mysqli_real_escape_string($conn, $_SESSION["api_key"]) ."'";
-  $result = mysqli_query($conn, $sql);
-
+  mysqli_query($conn, 'UPDATE users SET embed_title="'.$title.'" WHERE api_key="'.mysqli_real_escape_string($conn, $_SESSION["api_key"]).'"');
+  mysqli_query($conn, 'UPDATE users SET embed_desc="'.$desc.'" WHERE api_key="'.mysqli_real_escape_string($conn, $_SESSION["api_key"]).'"');
+  mysqli_query($conn, 'UPDATE users SET embed_theme="'.$colour.'" WHERE api_key="'.mysqli_real_escape_string($conn, $_SESSION["api_key"]).'"');
 }
 
 
@@ -56,8 +55,8 @@ if (isset($_POST['submit'])) {
     <meta name="mobile-web-app-capable" content="yes"/>
     <meta name="HandheldFriendly" content="True"/>
     <meta name="MobileOptimized" content="320"/>
-    <link rel="icon" href="<?php $_ENV['APP_LOGO']?>" type="image/x-icon"/>
-    <link rel="shortcut icon" href="<?php $_ENV['APP_LOGO']?>" type="image/x-icon"/>
+    <link rel="icon" href="<?= $settings['app_logo']?>" type="image/x-icon"/>
+    <link rel="shortcut icon" href="<?= $settings['app_logo']?>" type="image/x-icon"/>
     <meta name="description" content="Mythical Images comes with free hosting for your images. Get started today for free at MythicalSystems.xyz"/>
     <meta name="twitter:image:src" content="https://cdn.discordapp.com/attachments/1037824534880993310/1106309882677825696/New.png">
     <meta name="twitter:site" content="@Mythical_ui">
@@ -100,7 +99,7 @@ if (isset($_POST['submit'])) {
           </button>
           <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
             <a href=".">
-              <?php echo $_ENV['APP_NAME'] ?>
+            <?= $settings['app_name']?>
             </a>
           </h1>
           <div class="navbar-nav flex-row order-md-last">
@@ -108,7 +107,9 @@ if (isset($_POST['submit'])) {
               <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
                 <span class="avatar avatar-sm" style="background-image: url(/static/avatars/000m.jpg)"></span>
                 <div class="d-none d-xl-block ps-2">
-                  <div><?php echo $usrname ?></div>
+                  <div>
+                    <?php echo $usrname ?>
+                  </div>
                   
                 </div>
               </a>
@@ -231,8 +232,8 @@ if (isset($_POST['submit'])) {
               <div class="col-lg-auto ms-lg-auto">
                 <ul class="list-inline list-inline-dots mb-0">
                 <li class="list-inline-item">
-                    <a href="./changelog.html" class="link-secondary" rel="noopener">
-                      v1.3.4
+                    <a href="" class="link-secondary" rel="noopener">
+                      v1.3.5
                     </a>
                   </li>
                 </ul>

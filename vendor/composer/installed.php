@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'atorotech/atoropic',
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
-        'reference' => NULL,
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => '2aeef55b338f8e6be412e7512e23afabde7aabf2',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         'atorotech/atoropic' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
-            'reference' => NULL,
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => '2aeef55b338f8e6be412e7512e23afabde7aabf2',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -127,15 +127,6 @@
                 0 => '1.0',
             ),
         ),
-        'psr/log' => array(
-            'pretty_version' => '3.0.0',
-            'version' => '3.0.0.0',
-            'reference' => 'fe5ea303b0887d5caefd3d431c3e61ad47037001',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../psr/log',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
         'ralouphie/getallheaders' => array(
             'pretty_version' => '3.0.3',
             'version' => '3.0.3.0',
@@ -178,15 +169,6 @@
             'reference' => '7a6ff3f1959bb01aefccb463a0f2cd3d3d2fd936',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/polyfill-php80',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'textalk/websocket' => array(
-            'pretty_version' => '1.5.8',
-            'version' => '1.5.8.0',
-            'reference' => 'd05dbaa97500176447ffb1f1800573f23085ab13',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../textalk/websocket',
             'aliases' => array(),
             'dev_requirement' => false,
         ),

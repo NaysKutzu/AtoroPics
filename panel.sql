@@ -1,6 +1,3 @@
-
-
-
 DROP TABLE IF EXISTS `imgs`;
 CREATE TABLE `imgs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -9,13 +6,8 @@ CREATE TABLE `imgs` (
   `size` varchar(255) NOT NULL,
   `storage_folder` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=93 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-
-LOCK TABLES `imgs` WRITE;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 UNLOCK TABLES;
-
-
 DROP TABLE IF EXISTS `settings`;
 CREATE TABLE `settings` (
   `app_proto` varchar(255) NOT NULL,
@@ -31,12 +23,7 @@ CREATE TABLE `settings` (
   `smtp_from_name` varchar(255) NOT NULL,
   `discord_webhook` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-
-LOCK TABLES `settings` WRITE;
 UNLOCK TABLES;
-
-
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -53,10 +40,8 @@ CREATE TABLE `users` (
   `embed_theme` varchar(255) NOT NULL,
   `embed_sitename` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-
-LOCK TABLES `users` WRITE;
 UNLOCK TABLES;
 
 

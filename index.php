@@ -31,7 +31,11 @@ function getclientip() {
 // SEND MESSAGE TO WEBHOOK
 //
 function logClient($message) {
-    $url = $_ENV['DISCORD_WEBHOOK'];
+    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__, '.env');
+    $dotenv->load();
+    $conn = new mysqli($_ENV['MySQL_HOST'] . ':' .$_ENV['MySQL_PORT'], $_ENV['MySQL_USER'], $_ENV['MySQL_PASSWORD'], $_ENV['MySQL_DATABASE']);
+    $settings = $conn->query("SELECT * FROM settings")->fetch_array();
+    $url = $settings['discord_webhook'];
     
     $headers = [ 'Content-Type: application/json; charset=utf-8' ];
     $POST = ['content' => $message ];
@@ -43,7 +47,7 @@ function logClient($message) {
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($POST));
-    $response   = curl_exec($ch);
+    $response = curl_exec($ch);
 }
 
 
