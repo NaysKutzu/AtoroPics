@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 12, 2023 at 06:47 PM
+-- Generation Time: May 13, 2023 at 12:31 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -47,9 +47,9 @@ CREATE TABLE `settings` (
   `app_logo` text NOT NULL DEFAULT 'https://avatars.githubusercontent.com/u/118304455',
   `app_proto` varchar(255) NOT NULL,
   `app_url` varchar(255) NOT NULL,
-  `logo` varchar(255) NOT NULL,
-  `name` varchar(255) NOT NULL,
+  `enable_registration` enum('true','false') NOT NULL,
   `discord` varchar(255) NOT NULL,
+  `enable_smtp` enum('false','true') NOT NULL,
   `smtp_host` varchar(255) NOT NULL,
   `smtp_port` varchar(255) NOT NULL,
   `smtp_user` varchar(255) NOT NULL,
@@ -68,6 +68,7 @@ CREATE TABLE `settings` (
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `username` varchar(255) NOT NULL,
+  `avatar` text DEFAULT NULL,
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `code` text NOT NULL,

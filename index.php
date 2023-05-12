@@ -51,6 +51,4 @@ function logClient($message) {
 }
 
 
-
-
 ?>

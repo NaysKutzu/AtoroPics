@@ -1,4 +1,4 @@
 # AtoroPics
 
-v1.3.5 
+v1.3.6 
 Codename Greta

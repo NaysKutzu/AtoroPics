@@ -1,5 +1,8 @@
 <?php
 header('Content-Type: application/json');
+$lifetime = 30 * 24 * 60 * 60; 
+ini_set('session.gc_maxlifetime', $lifetime);
+session_set_cookie_params($lifetime);
 session_start();
 if (!isset($_SESSION['loggedin'])) {
     header("Location: ../../auth/login");
@@ -10,7 +13,7 @@ $userdb = $conn->query("SELECT * FROM users WHERE api_key = '" . mysqli_real_esc
 
 $sharexconfigfile = '{
   "Version": "15.0.0",
-  "Name": "'.$settings['name'].'",
+  "Name": "'.$settings['app_name'].'",
   "DestinationType": "ImageUploader, TextUploader, FileUploader",
   "RequestMethod": "POST",
   "RequestURL": "'.$settings['app_proto'].$settings['app_url'].'/api/upload",
@@ -23,7 +26,7 @@ $sharexconfigfile = '{
 }
 ';
 $filenamet = time();
-$file = $settings['name'].'_'.$userdb['username'].'_SharexConfig.sxcu';
+$file = $settings['app_name'].'_'.$userdb['username'].'_SharexConfig.sxcu';
 file_put_contents($file, $sharexconfigfile);
 header("Content-type: application/force-download");
 header("Content-Disposition: attachment; filename=".basename($file));

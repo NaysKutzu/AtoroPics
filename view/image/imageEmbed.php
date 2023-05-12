@@ -16,8 +16,8 @@ if(isset($_GET['i'])){
                 <link rel="stylesheet" href="./dist/css/argon.css">
                 <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.15.3/css/all.css">
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-                <link rel="icon" type="image/png" href="<?= $settings['logo']?>">
-                <title><?= $settings['name'] ?> | <?=  $data['title'] ?> </title>
+                <link rel="icon" type="image/png" href="<?= $settings['app_logo']?>">
+                <title><?= $settings['app_name'] ?> | <?=  $data['title'] ?> </title>
                 <meta property="twitter:card" content="summary_large_image" />
                 <meta property="twitter:image" content="<?=   $data['url']?>" />
                 <meta property="og:image" content="<?= $data['url'] ?>" />

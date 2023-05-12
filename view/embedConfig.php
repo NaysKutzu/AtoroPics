@@ -2,7 +2,9 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-
+$lifetime = 30 * 24 * 60 * 60; 
+ini_set('session.gc_maxlifetime', $lifetime);
+session_set_cookie_params($lifetime);
 session_start();
 if (!isset($_SESSION['loggedin'])) {
     header("Location: ../../auth/login");
@@ -46,7 +48,7 @@ if (isset($_POST['submit'])) {
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <title><?php $siteName ?></title>
+    <title><?= $settings['app_name'] ?> | Embed</title>
     <script defer data-api="/stats/api/event" data-domain="preview.tabler.io" src="/stats/js/script.js"></script>
     <meta name="msapplication-TileColor" content=""/>
     <meta name="theme-color" content=""/>
@@ -57,20 +59,6 @@ if (isset($_POST['submit'])) {
     <meta name="MobileOptimized" content="320"/>
     <link rel="icon" href="<?= $settings['app_logo']?>" type="image/x-icon"/>
     <link rel="shortcut icon" href="<?= $settings['app_logo']?>" type="image/x-icon"/>
-    <meta name="description" content="Mythical Images comes with free hosting for your images. Get started today for free at MythicalSystems.xyz"/>
-    <meta name="twitter:image:src" content="https://cdn.discordapp.com/attachments/1037824534880993310/1106309882677825696/New.png">
-    <meta name="twitter:site" content="@Mythical_ui">
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="An image host, that cares.">
-    <meta name="twitter:description" content="Mythical Images comes with free hosting for your images. Get started today for free at MythicalSystems.xyz">
-    <meta property="og:image" content="https://cdn.discordapp.com/attachments/1037824534880993310/1106309882677825696/New.png">
-    <meta property="og:image:width" content="1280">
-    <meta property="og:image:height" content="640">
-    <meta property="og:site_name" content="Mythical">
-    <meta property="og:type" content="object">
-    <meta property="og:title" content="An image host, that cares.">
-    <meta property="og:url" content="https://cdn.discordapp.com/attachments/1037824534880993310/1106309882677825696/New.png">
-    <meta property="og:description" content="Mythical Images comes with free hosting for your images. Get started today for free at MythicalSystems.xyz">
     <!-- CSS files -->
     <link href="/dist/css/tabler.min.css?1674944800" rel="stylesheet"/>
     <link href="/dist/css/tabler-flags.min.css?1674944800" rel="stylesheet"/>
@@ -105,7 +93,7 @@ if (isset($_POST['submit'])) {
           <div class="navbar-nav flex-row order-md-last">
             <div class="nav-item dropdown">
               <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
-                <span class="avatar avatar-sm" style="background-image: url(/static/avatars/000m.jpg)"></span>
+                <span class="avatar avatar-sm" style="background-image: url(<?= $userdb['avatar'] ?>)"></span>
                 <div class="d-none d-xl-block ps-2">
                   <div>
                     <?php echo $usrname ?>
@@ -233,7 +221,7 @@ if (isset($_POST['submit'])) {
                 <ul class="list-inline list-inline-dots mb-0">
                 <li class="list-inline-item">
                     <a href="" class="link-secondary" rel="noopener">
-                      v1.3.5
+                      v1.3.6
                     </a>
                   </li>
                 </ul>

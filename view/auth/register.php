@@ -1,30 +1,29 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-
-    //Import PHPMailer classes into the global namespace
-    //These must be at the top of your script, not inside a function
+if ($settings['enable_registration'] == "false")
+{
+  header('location: login');
+}
+ini_set('display_errors', 0);
+ini_set('display_startup_errors', 0);
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\SMTP;
     use PHPMailer\PHPMailer\Exception;
-
+    $lifetime = 30 * 24 * 60 * 60; 
+    ini_set('session.gc_maxlifetime', $lifetime);
+    session_set_cookie_params($lifetime);
     session_start();
     if (isset($_SESSION['SESSION_EMAIL'])) {
         header("Location: /dashboard");
         die();
     }
-
-    
-    $smtp_host = $_ENV['SMTP_HOST'];
-    $smtp_username = $_ENV['SMTP_USER'];
-    $smtp_password = $_ENV['SMTP_PASSWORD'];
-    $smtp_port = $_ENV['SMTP_PORT'];
-    $smtp_encryption = $_ENV['SMTP_ENCRYPTION'];
-    $smtp_from = $_ENV['SMTP_FROM'];
-    $name = $_ENV['SMTP_FROM_NAME'];
-
+    if ($settings['enable_smtp'] == "true") {
+      $smtp_host = $settings['smtp_host'];
+      $smtp_username = $settings['smtp_user'];
+      $smtp_password = $settings['smtp_password'];
+      $smtp_port = $settings['smtp_port'];
+      $smtp_from = $settings['smtp_from'];
+      $name = $settings['smtp_from_name'];
+    }
     $length = 16;
     $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
     $pass = array();
@@ -42,9 +41,15 @@ error_reporting(E_ALL);
         $email = mysqli_real_escape_string($conn, $_POST['email']);
         $password = mysqli_real_escape_string($conn, md5($_POST['password']));
         $confirm_password = mysqli_real_escape_string($conn, md5($_POST['confirm-password']));
-        $code = mysqli_real_escape_string($conn, md5(rand()));
-
-
+        if ($settings['enable_smtp'] == "true")
+        {
+          $code = mysqli_real_escape_string($conn, md5(rand()));
+        }
+        else
+        {
+          $code = "null";
+        }
+        
         if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM users WHERE email='{$email}'")) > 0) {
             $msg = "<div class='alert alert-danger'>{$email} - This email address is in use.</div>";
         }
@@ -53,45 +58,59 @@ error_reporting(E_ALL);
         } 
         else {
             if ($password === $confirm_password) {
-                $sql = "INSERT INTO users (username, email, password, code, last_ip, register_ip, api_key, admin, embed_title, embed_desc, embed_theme, embed_sitename) VALUES ('{$name}', '{$email}', '{$password}', '{$code}', '{$ip_addres}', '{$ip_addres}', '{$key}', 'false', 'AtoroShare', '#ffff' ,'A free image hosting service', 'Didcom')";
-                $result = mysqli_query($conn, $sql);
+                $default = "https://www.gravatar.com/avatar/00000000000000000000000000000000";
+                $grav_url = "https://www.gravatar.com/avatar/" . md5( strtolower( trim( $email ) ) ) . "?d=" . urlencode( $default );
 
+                $sql = "INSERT INTO users (username, avatar, email, password, code, last_ip, register_ip, api_key, admin, embed_title, embed_desc, embed_theme, embed_sitename) VALUES ('{$name}', '{$grav_url}', '{$email}', '{$password}', '{$code}', '{$ip_addres}', '{$ip_addres}', '{$key}', 'false', 'AtoroShare', '#ffff' ,'A free image hosting service', 'Didcom')";
+                $result = mysqli_query($conn, $sql);
+                
                 if ($result) {
                     echo "<div style='display: none;'>";
                     //Create an instance; passing `true` enables exceptions
-                    $mail = new PHPMailer(true);
+                    if ($settings['enable_smtp'] == "true") {
+                      $mail = new PHPMailer(true);
 
-                    try {
-                        //Server settings
-                        $mail->SMTPDebug = 2;                      //Enable verbose debug output
-                        $mail->isSMTP();                                            //Send using SMTP
-                        $mail->Host       = $smtp_host;                     //Set the SMTP server to send through
-                        $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-                        $mail->Username   = $smtp_username;                     //SMTP username
-                        $mail->Password   = $smtp_password;                               //SMTP password
-                        $mail->SMTPSecure = 'tls';            //Enable implicit TLS encryption
-                        $mail->Port       = $smtp_port;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
-
-                        //Recipients
-                        $mail->setFrom($smtp_from);
-                        $mail->addAddress($email);
-
-                        //Content
-                        $mail->isHTML(true);                                  //Set email format to HTML
-                        $mail->Subject = 'no reply';
-                        $mail->Body    = 'Here is the verification link <b><a href="https://img.atoro.tech/auth/login/?verification='.$code.'">https://img.atoro.tech/auth/login/?verification='.$code.'</a></b>';
-
-                        $mail->send();
-                        echo 'Message has been sent';
-                    } catch (Exception $e) {
-                        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+                      try {
+                          //Server settings
+                          $mail->SMTPDebug = 2;                      //Enable verbose debug output
+                          $mail->isSMTP();                                            //Send using SMTP
+                          $mail->Host       = $smtp_host;                     //Set the SMTP server to send through
+                          $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+                          $mail->Username   = $smtp_username;                     //SMTP username
+                          $mail->Password   = $smtp_password;                               //SMTP password
+                          $mail->SMTPSecure = 'tls';            //Enable implicit TLS encryption
+                          $mail->Port       = $smtp_port;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+  
+                          //Recipients
+                          $mail->setFrom($smtp_from);
+                          $mail->addAddress($email);
+  
+                          //Content
+                          $mail->isHTML(true);                                  //Set email format to HTML
+                          $mail->Subject = 'no reply';
+                          $mail->Body    = 'Here is the verification link <b><a href="https://img.atoro.tech/auth/login/?verification='.$code.'">https://img.atoro.tech/auth/login/?verification='.$code.'</a></b>';
+  
+                          $mail->send();
+                          echo 'Message has been sent';
+                      } catch (Exception $e) {
+                          echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+                      }
+                      echo "</div>";
+                      $msg = "<div class='alert alert-info'>We've send a verification link on your email address.</div>";
                     }
-                    echo "</div>";
-                    $msg = "<div class='alert alert-info'>We've send a verification link on your email address.</div>";
+                    else
+                    {
+                      echo "</div>";
+                      $msg = "<div class='alert alert-info'>Thanks for using ".$settings['app_name']."</div>";
+                      header('location: login');
+                    }
+                    
                 } else {
+                  echo "</div>";
                     $msg = "<div class='alert alert-danger'>Something wrong went.</div>";
                 }
             } else {
+              echo "</div>";
                 $msg = "<div class='alert alert-danger'>Password and Confirm Password do not match</div>";
             }
         }
@@ -104,7 +123,7 @@ error_reporting(E_ALL);
 * @version 1.0.0-beta17
 * @link https://tabler.io
 * Copyright 2018-2023 The Tabler Authors
-* Copyright 2018-2023 codecalm.net <?php echo $usrname ?>
+* Copyright 2018-2023 codecalm.net
 * Licensed under MIT (https://github.com/tabler/tabler/blob/master/LICENSE)
 -->
 <html lang="en">
@@ -112,13 +131,14 @@ error_reporting(E_ALL);
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <title><?= $settings['app_name']?> | Register</title>
+    <title><?= $settings['app_name'] ?> | Register</title>
     <!-- CSS files -->
     <link href="/dist/css/tabler.min.css?1674944402" rel="stylesheet"/>
     <link href="/dist/css/tabler-flags.min.css?1674944402" rel="stylesheet"/>
     <link href="/dist/css/tabler-payments.min.css?1674944402" rel="stylesheet"/>
     <link href="/dist/css/tabler-vendors.min.css?1674944402" rel="stylesheet"/>
     <link href="/dist/css/demo.min.css?1674944402" rel="stylesheet"/>
+  
     <style>
       @import url('https://rsms.me/inter/inter.css');
       :root {

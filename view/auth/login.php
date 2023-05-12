@@ -1,4 +1,9 @@
 <?php
+$recaptcha = new \ReCaptcha\ReCaptcha( '6LcLogUmAAAAAFMx41gnONPP1Nn2HYSt6GTTRsMz' );
+
+$lifetime = 30 * 24 * 60 * 60; 
+ini_set('session.gc_maxlifetime', $lifetime);
+session_set_cookie_params($lifetime);
     session_start();
     if (isset($_SESSION['SESSION_EMAIL'])) {
         header("Location: /dashboard");
@@ -20,7 +25,10 @@
     }
 
     if (isset($_POST['submit'])) {
-        $email = mysqli_real_escape_string($conn, $_POST['email']);
+        $resp      = $recaptcha->setExpectedHostname( $_SERVER['HTTP_HOST'] )
+        ->verify( $_POST["g-recaptcha-response"], $_SERVER['REMOTE_ADDR'] );
+        if ( $resp->isSuccess() ) {
+          $email = mysqli_real_escape_string($conn, $_POST['email']);
         $password = mysqli_real_escape_string($conn, md5($_POST['password']));
 
         $sql = "SELECT * FROM users WHERE email='{$email}' AND password='{$password}'";
@@ -48,6 +56,11 @@
         } else {
             $msg = "<div class='alert alert-danger'>Email or password do not match.</div>";
         }
+        } else {
+            // code for showing an error message goes here
+            $errors = $resp->getErrorCodes();
+        }
+        
     }
 ?>
 
@@ -57,7 +70,7 @@
 * @version 1.0.0-beta17
 * @link https://tabler.io
 * Copyright 2018-2023 The Tabler Authors
-* Copyright 2018-2023 codecalm.net <?php echo $usrname ?>
+* Copyright 2018-2023 codecalm.net 
 * Licensed under MIT (https://github.com/tabler/tabler/blob/master/LICENSE)
 -->
 <html lang="en">
@@ -73,6 +86,7 @@
     <link href="/dist/css/tabler-vendors.min.css?1674944402" rel="stylesheet"/>
     <link href="/dist/css/demo.min.css?1674944402" rel="stylesheet"/>
     <link href="/dist/js/block.js" rel="stylesheet"/>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <style>
       @import url('https://rsms.me/inter/inter.css');
       :root {
@@ -112,6 +126,7 @@
                   </span>
                 </div>
               </div>
+              <div class="g-recaptcha" data-sitekey="6LcLogUmAAAAAKkDgK6n-kY0-8dE6JugooBrY9bt"></div>
               <div class="form-footer">
                 <button type="submit" name="submit" class="btn btn-primary w-100">Sign in</button>
               </div>
@@ -123,10 +138,17 @@
         </div>
       </div>
     </div>     
-    </script>
     <!-- Libs JS -->
     <!-- Tabler Core -->
     <script src="/dist/js/tabler.min.js?1674944402" defer></script>
     <script src="/dist/js/demo.min.js?1674944402" defer></script>
+    <script>
+      $('form').submit(function(e) {
+   if ($("#g-recaptcha-response").val() === '') {
+      e.preventDefault();
+      alert("Please check the recaptcha");
+   }
+  });
+    </script>
   </body>
 </html>
