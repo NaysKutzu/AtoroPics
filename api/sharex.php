@@ -9,7 +9,7 @@ if (!isset($_SESSION['loggedin'])) {
 }
 
 
-$userdb = $conn->query("SELECT * FROM users WHERE api_key = '" . mysqli_real_escape_string($conn, $_SESSION["api_key"]) . "'")->fetch_array();
+$userdb = $conn->query("SELECT * FROM atoropics_users WHERE api_key = '" . mysqli_real_escape_string($conn, $_SESSION["api_key"]) . "'")->fetch_array();
 
 $sharexconfigfile = '{
   "Version": "15.0.0",

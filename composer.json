@@ -1,6 +1,6 @@
 {
     "name": "atorotech/atoropic",
-    "description": "A ShareX server/client area built in php",
+    "description": "A simple sharex system",
     "type": "project",
     "require": {
         "vlucas/phpdotenv": "^5.5",

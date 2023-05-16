@@ -16,17 +16,19 @@
     <script defer data-api="/stats/api/event" data-domain="preview.tabler.io" src="/stats/js/script.js"></script>
     <meta name="msapplication-TileColor" content=""/>
     <meta name="theme-color" content=""/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="mobile-web-app-capable" content="yes"/>
     <meta name="HandheldFriendly" content="True"/>
     <meta name="MobileOptimized" content="320"/>
     <!-- CSS files -->
-    <link href="/dist/css/tabler.min.css?1674944800" rel="stylesheet"/>
-    <link href="/dist/css/tabler-flags.min.css?1674944800" rel="stylesheet"/>
-    <link href="/dist/css/tabler-payments.min.css?1674944800" rel="stylesheet"/>
-    <link href="/dist/css/tabler-vendors.min.css?1674944800" rel="stylesheet"/>
-    <link href="/dist/css/demo.min.css?1674944800" rel="stylesheet"/>
+    <link href="/dist/css/tabler.min.css" rel="stylesheet"/>
+    <link href="/dist/css/tabler-flags.min.css" rel="stylesheet"/>
+    <link href="/dist/css/tabler-payments.min.css" rel="stylesheet"/>
+    <link href="/dist/css/tabler-vendors.min.css" rel="stylesheet"/>
+    <link href="/dist/css/demo.min.css" rel="stylesheet"/>
+    <link href="./dist/css/preloader.css" rel="stylesheet"/>
     <style>
       @import url('https://rsms.me/inter/inter.css');
       :root {
@@ -38,7 +40,10 @@
     </style>
   </head>
   <body  class=" border-top-wide border-primary d-flex flex-column">
-    <script src="/dist/js/demo-theme.min.js?1674944800"></script>
+  <div id="preloader">
+        <div id="loader"></div>
+    </div>
+    <script src="/dist/js/demo-theme.min.js"></script>
     <div class="page page-center">
       <div class="container-tight py-4">
         <div class="empty">
@@ -59,7 +64,8 @@
     </div>
     <!-- Libs JS -->
     <!-- Tabler Core -->
-    <script src="/dist/js/tabler.min.js?1674944800" defer></script>
-    <script src="/dist/js/demo.min.js?1674944800" defer></script>
+    <script src="/dist/js/tabler.min.js" defer></script>
+    <script src="/dist/js/demo.min.js" defer></script>
+    <script src="./dist/js/preloader.js" defer></script>
   </body>
 </html>

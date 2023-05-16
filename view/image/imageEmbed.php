@@ -21,10 +21,23 @@ if(isset($_GET['i'])){
                 <meta property="twitter:card" content="summary_large_image" />
                 <meta property="twitter:image" content="<?=   $data['url']?>" />
                 <meta property="og:image" content="<?= $data['url'] ?>" />
-               
-                <link type="application/json+oembed" href="https://img.atoro.tech/'<?= $json_file ?>' " />
+                <meta name="twitter:site" content="<?= $data['title'] ?>">
+                <meta property="og:site_name" content="<?= $data['small_title'] ?>">
+                <meta name="twitter:description" content="<?= $data['description']?>">
+                <meta property="og:description" content="<?= $data['description']?>" />
+                <meta name="twitter:card" content="summary_large_image" /> 
+                <meta name="twitter:image" content="<?= $data['url']?>" /> 
+                <meta name="twitter:image:src" content="<?= $data['url']?>" />
+                <meta property="og:image" content="<?= $data['url']?>" />
+                <meta name="theme-color" content="<?= $data['theme'] ?>" />
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+                <link type="application/json+oembed" href="<?php echo $settings['app_proto'].$settings['app_url'].'/'.$json_file; ?>" />
+                <link href="./dist/css/preloader.css" rel="stylesheet"/>
             </head>
             <body class="" style="background-color: #1a2234;">
+            <div id="preloader">
+        <div id="loader"></div>
+    </div>
             <br><br>
 
                 <div class="row mt-4 no-gutters">
@@ -132,6 +145,7 @@ if(isset($_GET['i'])){
     });
             
     </script>
+    <script src="./dist/js/preloader.js" defer></script>
         </html><?php 
         } else {
             echo '<script>window.location.replace("'.$settings['app_proto'].$settings['app_url'].'");</script>';

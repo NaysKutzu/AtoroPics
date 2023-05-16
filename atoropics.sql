@@ -1,53 +1,68 @@
--- phpMyAdmin SQL Dump
--- version 5.2.1
--- https://www.phpmyadmin.net/
---
--- Host: 127.0.0.1
--- Generation Time: May 13, 2023 at 12:31 AM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
 
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
 
---
--- Database: `atoropic`
---
+DROP TABLE IF EXISTS `atoropics_domains`;
+CREATE TABLE `atoropics_domains` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `domain` text DEFAULT NULL,
+  `ownerkey` text DEFAULT NULL,
+  `enabled` enum('true','false','suspendet') NOT NULL,
+  `created-date` datetime NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `imgs`
---
+LOCK TABLES `atoropics_domains` WRITE;
+UNLOCK TABLES;
 
-CREATE TABLE `imgs` (
-  `id` int(11) NOT NULL,
+
+DROP TABLE IF EXISTS `atoropics_imgs`;
+CREATE TABLE `atoropics_imgs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `owner_key` varchar(255) NOT NULL,
   `size` varchar(255) NOT NULL,
-  `storage_folder` text NOT NULL
+  `storage_folder` text NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `settings`
---
+LOCK TABLES `atoropics_imgs` WRITE;
+UNLOCK TABLES;
 
-CREATE TABLE `settings` (
-  `id` int(11) NOT NULL,
+
+DROP TABLE IF EXISTS `atoropics_nodes`;
+CREATE TABLE `atoropics_nodes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` text DEFAULT NULL COMMENT 'The name of the node',
+  `domain` text DEFAULT NULL COMMENT 'The domain of the nodes ex: "node-1.yourimghost.net"',
+  `description` text DEFAULT NULL COMMENT 'The description of the node',
+  `ip` text DEFAULT NULL COMMENT 'The server ip to connect to the ssh console! ',
+  `port` text DEFAULT NULL COMMENT 'The server port to connect to the daemon',
+  `username` text DEFAULT NULL COMMENT 'The username for the ssh user',
+  `password` text DEFAULT NULL COMMENT 'The password for the ssh user',
+  `created-date` datetime NOT NULL DEFAULT current_timestamp() COMMENT 'The creation date for the node',
+  `enabled` enum('true','false') NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+LOCK TABLES `atoropics_nodes` WRITE;
+UNLOCK TABLES;
+
+
+DROP TABLE IF EXISTS `atoropics_settings`;
+CREATE TABLE `atoropics_settings` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `app_name` text NOT NULL DEFAULT 'AtoroPics',
   `app_logo` text NOT NULL DEFAULT 'https://avatars.githubusercontent.com/u/118304455',
   `app_proto` varchar(255) NOT NULL,
   `app_url` varchar(255) NOT NULL,
   `enable_registration` enum('true','false') NOT NULL,
+  `enable_rechapa2` enum('false','true') NOT NULL,
+  `rechapa2_site_key` text DEFAULT NULL,
+  `rechapa2_site_secret` text DEFAULT NULL,
   `discord` varchar(255) NOT NULL,
   `enable_smtp` enum('false','true') NOT NULL,
   `smtp_host` varchar(255) NOT NULL,
@@ -56,77 +71,38 @@ CREATE TABLE `settings` (
   `smtp_password` varchar(255) NOT NULL,
   `smtp_from` varchar(255) NOT NULL,
   `smtp_from_name` varchar(255) NOT NULL,
-  `discord_webhook` varchar(255) NOT NULL
+  `discord_webhook` varchar(255) NOT NULL,
+  `version` text NOT NULL DEFAULT '1.3.7',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `users`
---
+LOCK TABLES `atoropics_settings` WRITE;
+UNLOCK TABLES;
 
-CREATE TABLE `users` (
-  `id` int(11) NOT NULL,
-  `username` varchar(255) NOT NULL,
+
+DROP TABLE IF EXISTS `atoropics_users`;
+CREATE TABLE `atoropics_users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` text NOT NULL,
   `avatar` text DEFAULT NULL,
-  `email` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
+  `email` text NOT NULL,
+  `password` text NOT NULL,
   `code` text NOT NULL,
-  `last_ip` varchar(255) NOT NULL,
-  `register_ip` varchar(255) NOT NULL,
-  `api_key` varchar(255) NOT NULL,
-  `admin` varchar(255) NOT NULL,
-  `embed_title` varchar(255) NOT NULL,
-  `embed_desc` varchar(255) NOT NULL,
-  `embed_theme` varchar(255) NOT NULL,
-  `embed_sitename` varchar(255) NOT NULL
+  `last_ip` text NOT NULL,
+  `register_ip` text NOT NULL,
+  `api_key` text NOT NULL,
+  `admin` enum('false','true') NOT NULL DEFAULT 'false',
+  `embed_title` text NOT NULL,
+  `embed_small_title` text DEFAULT NULL,
+  `embed_desc` text NOT NULL,
+  `embed_theme` text NOT NULL,
+  `embed_sitename` text NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Indexes for dumped tables
---
 
---
--- Indexes for table `imgs`
---
-ALTER TABLE `imgs`
-  ADD PRIMARY KEY (`id`);
+LOCK TABLES `atoropics_users` WRITE;
+UNLOCK TABLES;
 
---
--- Indexes for table `settings`
---
-ALTER TABLE `settings`
-  ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `imgs`
---
-ALTER TABLE `imgs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `settings`
---
-ALTER TABLE `settings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `users`
---
-ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

@@ -6,4 +6,7 @@ apache_start.bat
 /public/storage/uploads/*.png
 /public/storage/uploads/*.jpng
 /public/storage/uploads/*.gif
+/public/db-manager
+/.vscode
 .env
+backup.bash

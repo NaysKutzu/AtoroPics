@@ -3,16 +3,16 @@ header('Content-Type: application/json');
 
 if (isset($_POST['api_key']))
 {
-    $query = "SELECT * FROM users WHERE api_key='".$_POST['api_key']."'";
+    $query = "SELECT * FROM atoropics_users WHERE api_key='".$_POST['api_key']."'";
     $results = mysqli_query($conn, $query);
     if (mysqli_num_rows($results) == 1) {
-        $userdb = $conn->query("SELECT * FROM users WHERE api_key = '". $_POST['api_key'] . "'")->fetch_array();
+        $userdb = $conn->query("SELECT * FROM atoropics_users WHERE api_key = '". $_POST['api_key'] . "'")->fetch_array();
         $username = $userdb['username'];
         $desc = $userdb['embed_desc'];
         $desc_tit = $userdb['embed_title'];
         $embed_theme = $userdb['embed_theme'];
         $site_name = $userdb['embed_sitename'];
-
+        $small_title = $userdb['embed_small_title'];
         if(isset($_FILES['file'])){
             $file = $_FILES['file'];
             $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
@@ -47,6 +47,7 @@ if (isset($_POST['api_key']))
                         'title' => $desc_tit,
                         'theme' => $embed_theme,
                         'sitename' => $site_name,
+                        'small_title' => $small_title,
                         'date' => $date,
                         'filesize' => $filesize
                     );
@@ -54,7 +55,7 @@ if (isset($_POST['api_key']))
                     file_put_contents("../public/storage/json/".$imgname_c.'.json', $json);
                     echo $settings['app_proto'].$settings['app_url']."/i?i=".$imgname_c;
                     $apikey = $_POST['api_key'];
-                    $conn->query("INSERT INTO imgs (name, owner_key, size, storage_folder) VALUES ('$imgname_c', '$apikey', '$filesize', '$imgurl')");
+                    $conn->query("INSERT INTO atoropics_imgs (name, owner_key, size, storage_folder) VALUES ('$imgname_c', '$apikey', '$filesize', '$imgurl')");
                 }else{
                     echo json_encode(array('status' => 'error', 'message' => 'Failed to upload file'));
                 }

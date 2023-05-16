@@ -1,5 +1,9 @@
 <?php
-$recaptcha = new \ReCaptcha\ReCaptcha( '6LcLogUmAAAAAFMx41gnONPP1Nn2HYSt6GTTRsMz' );
+if ($settings['enable_rechapa2'] == "true")
+{
+  $recaptcha = new \ReCaptcha\ReCaptcha( $settings['rechapa2_site_secret'] );
+}
+
 
 $lifetime = 30 * 24 * 60 * 60; 
 ini_set('session.gc_maxlifetime', $lifetime);
@@ -13,8 +17,8 @@ session_set_cookie_params($lifetime);
     $msg = "";
 
     if (isset($_GET['verification'])) {
-        if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM users WHERE code='{$_GET['verification']}'")) > 0) {
-            $query = mysqli_query($conn, "UPDATE users SET code='' WHERE code='{$_GET['verification']}'");
+        if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM atoropics_users WHERE code='{$_GET['verification']}'")) > 0) {
+            $query = mysqli_query($conn, "UPDATE atoropics_users SET code='' WHERE code='{$_GET['verification']}'");
             
             if ($query) {
                 $msg = "<div class='alert alert-success'>Account verification has been successfully completed.</div>";
@@ -25,19 +29,13 @@ session_set_cookie_params($lifetime);
     }
 
     if (isset($_POST['submit'])) {
-        $resp      = $recaptcha->setExpectedHostname( $_SERVER['HTTP_HOST'] )
-        ->verify( $_POST["g-recaptcha-response"], $_SERVER['REMOTE_ADDR'] );
-        if ( $resp->isSuccess() ) {
-          $email = mysqli_real_escape_string($conn, $_POST['email']);
+      if ($settings['enable_rechapa2'] == "false") {
+        $email = mysqli_real_escape_string($conn, $_POST['email']);
         $password = mysqli_real_escape_string($conn, md5($_POST['password']));
-
-        $sql = "SELECT * FROM users WHERE email='{$email}' AND password='{$password}'";
+        $sql = "SELECT * FROM atoropics_users WHERE email='{$email}' AND password='{$password}'";
         $result = mysqli_query($conn, $sql);
-
-
         if (mysqli_num_rows($result) === 1) {
             $row = mysqli_fetch_assoc($result);
-
             $api_key = $row['api_key'];
             $_SESSION["api_key"] = $api_key;
             $_SESSION['loggedin'] = true;
@@ -45,21 +43,67 @@ session_set_cookie_params($lifetime);
             $_SESSION["email"] = $email;
             $username = $row['username'];
             $_SESSION["username"] = $username;
-
             if (empty($row['code'])) {
                 $_SESSION['SESSION_EMAIL'] = $email;
                 header("Location: /dashboard");
-                // logClient("Email : " . $_SESSION["email"] .' & Username : '. $_SESSION["username"] .' ');
+                exit;
             } else {
-                $msg = "<div class='alert alert-info'>First verify your account and try again.</div>";
+                if ($row['code'] == "null") {
+                  $_SESSION['SESSION_EMAIL'] = $email;
+                  header("Location: /dashboard");
+                  exit;
+                }
+                else
+                {
+                  $msg = "<div class='alert alert-info'>First verify your account and try again.</div>";
+                }
             }
         } else {
             $msg = "<div class='alert alert-danger'>Email or password do not match.</div>";
         }
+      }
+      else
+      {
+        $resp      = $recaptcha->setExpectedHostname( $_SERVER['HTTP_HOST'] )
+        ->verify( $_POST["g-recaptcha-response"], $_SERVER['REMOTE_ADDR'] );
+        if ( $resp->isSuccess() ) {
+          $email = mysqli_real_escape_string($conn, $_POST['email']);
+          $password = mysqli_real_escape_string($conn, md5($_POST['password']));
+          $sql = "SELECT * FROM atoropics_users WHERE email='{$email}' AND password='{$password}'";
+          $result = mysqli_query($conn, $sql);
+          if (mysqli_num_rows($result) === 1) {
+              $row = mysqli_fetch_assoc($result);
+              $api_key = $row['api_key'];
+              $_SESSION["api_key"] = $api_key;
+              $_SESSION['loggedin'] = true;
+              $email = $row['email'];
+              $_SESSION["email"] = $email;
+              $username = $row['username'];
+              $_SESSION["username"] = $username;
+              if (empty($row['code'])) {
+                  $_SESSION['SESSION_EMAIL'] = $email;
+                  header("Location: /dashboard");
+                  exit;
+              } else {
+                  if ($row['code'] == "null") {
+                    $_SESSION['SESSION_EMAIL'] = $email;
+                    header("Location: /dashboard");
+                    exit;
+                  }
+                  else
+                  {
+                    $msg = "<div class='alert alert-info'>First verify your account and try again.</div>";
+                  }
+              }
+          } else {
+              $msg = "<div class='alert alert-danger'>Email or password do not match.</div>";
+          }
         } else {
             // code for showing an error message goes here
             $errors = $resp->getErrorCodes();
         }
+      }
+       
         
     }
 ?>
@@ -80,13 +124,15 @@ session_set_cookie_params($lifetime);
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
     <title><?= $settings['app_name']?> | Login</title>
     <!-- CSS files -->
-    <link href="/dist/css/tabler.min.css?1674944402" rel="stylesheet"/>
-    <link href="/dist/css/tabler-flags.min.css?1674944402" rel="stylesheet"/>
-    <link href="/dist/css/tabler-payments.min.css?1674944402" rel="stylesheet"/>
-    <link href="/dist/css/tabler-vendors.min.css?1674944402" rel="stylesheet"/>
-    <link href="/dist/css/demo.min.css?1674944402" rel="stylesheet"/>
-    <link href="/dist/js/block.js" rel="stylesheet"/>
+    <link href="/dist/css/tabler.min.css" rel="stylesheet"/>
+    <link href="/dist/css/tabler-flags.min.css" rel="stylesheet"/>
+    <link href="/dist/css/tabler-payments.min.css" rel="stylesheet"/>
+    <link href="/dist/css/tabler-vendors.min.css" rel="stylesheet"/>
+    <link href="/dist/css/demo.min.css" rel="stylesheet"/>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <link href="/dist/js/block.js" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="./dist/css/preloader.css" rel="stylesheet"/>
     <style>
       @import url('https://rsms.me/inter/inter.css');
       :root {
@@ -98,7 +144,10 @@ session_set_cookie_params($lifetime);
     </style>
   </head>
   <body  class=" d-flex flex-column">
-    <script src="/dist/js/demo-theme.min.js?1674944402"></script>
+  <div id="preloader">
+        <div id="loader"></div>
+    </div>
+    <script src="/dist/js/demo-theme.min.js"></script>
     <div class="page page-center">
       <div class="container container-tight py-4">
         <div class="text-center mb-4">
@@ -126,7 +175,23 @@ session_set_cookie_params($lifetime);
                   </span>
                 </div>
               </div>
-              <div class="g-recaptcha" data-sitekey="6LcLogUmAAAAAKkDgK6n-kY0-8dE6JugooBrY9bt"></div>
+              <?php 
+              if ($settings['enable_rechapa2'] == "true") {
+                ?>  
+                    <div class="text-center">
+                      <div class="input-group input-group-flat" style="max-width: 300px; margin: 0 auto;">
+                        <br>
+                        <div class="g-recaptcha" data-sitekey="<?= $settings['rechapa2_site_key']?>"></div>
+                      </div>
+                    </div>
+                <?php
+              }
+              else
+              {
+
+              }
+              ?>
+              
               <div class="form-footer">
                 <button type="submit" name="submit" class="btn btn-primary w-100">Sign in</button>
               </div>
@@ -140,9 +205,13 @@ session_set_cookie_params($lifetime);
     </div>     
     <!-- Libs JS -->
     <!-- Tabler Core -->
-    <script src="/dist/js/tabler.min.js?1674944402" defer></script>
-    <script src="/dist/js/demo.min.js?1674944402" defer></script>
-    <script>
+    <script src="/dist/js/tabler.min.js" defer></script>
+    <script src="/dist/js/demo.min.js" defer></script>
+    <script src="./dist/js/preloader.js" defer></script>
+<?php 
+if ($settings['enable_rechapa2'] == "true") {
+  ?>
+      <script>
       $('form').submit(function(e) {
    if ($("#g-recaptcha-response").val() === '') {
       e.preventDefault();
@@ -150,5 +219,8 @@ session_set_cookie_params($lifetime);
    }
   });
     </script>
+  <?php
+}
+?>
   </body>
 </html>

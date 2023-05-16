@@ -9,23 +9,50 @@ try {
 
     $router->add('/', function() {
         require("../index.php");
-        require("../view/index.php");
+        if ($_SERVER['HTTP_HOST'] == $settings['app_url'])
+        {
+            require("../view/index.php");
+        } else {
+          header('location: '.$settings['app_proto'].$settings['app_url']."/");  
+        }
     });
 
     $router->add('/auth/login', function() {
         require("../index.php");
-        require("../view/auth/login.php");
+        if ($_SERVER['HTTP_HOST'] == $settings['app_url'])
+        {
+            require("../view/auth/login.php");
+        } else {
+          header('location: '.$settings['app_proto'].$settings['app_url']."/auth/login");  
+        }
+        
     });
 
     $router->add('/auth/register', function() {
         require("../index.php");
-        require("../view/auth/register.php");
+        if ($_SERVER['HTTP_HOST'] == $settings['app_url'])
+        {
+            require("../view/auth/register.php");
+        } else {
+          header('location: '.$settings['app_proto'].$settings['app_url']."/auth/register");  
+        }
+        
     });
 
     $router->add('/auth/logout', function() {
         require("../index.php");
-        require("../view/auth/logout.php");
+        if ($_SERVER['HTTP_HOST'] == $settings['app_url'])
+        {
+            require("../view/auth/logout.php");
+        } else {
+          header('location: '.$settings['app_proto'].$settings['app_url']."/auth/logout");  
+        }
     });
+
+    $router->add('/test', function(){
+        require("../index.php");
+        require('../view/test.php');
+    }); 
 
     $router->add('/i', function() {
         require("../index.php");
@@ -34,12 +61,24 @@ try {
 
     $router->add('/dashboard', function() {
         require("../index.php");
-        require("../view/images.php");
+        if ($_SERVER['HTTP_HOST'] == $settings['app_url'])
+        {
+            require("../view/images.php");
+        } else {
+          header('location: '.$settings['app_proto'].$settings['app_url']."/dashboard");  
+        }
+        
     });
 
     $router->add('/config', function() {
         require("../index.php");
-        require("../view/embedConfig.php");
+        if ($_SERVER['HTTP_HOST'] == $settings['app_url'])
+        {
+            require("../view/embedConfig.php");
+        } else {
+          header('location: '.$settings['app_proto'].$settings['app_url']."/config");  
+        }
+        
     });
 
     $router->add("/api/config", function() {
@@ -52,14 +91,65 @@ try {
         require("../api/upload.php");
     });
 
+    $router->add("/domains", function() {
+        require("../index.php");
+        if ($_SERVER['HTTP_HOST'] == $settings['app_url'])
+        {
+            require("../view/domainList.php");
+        } else {
+          header('location: '.$settings['app_proto'].$settings['app_url']."/domains");  
+        }
+    });
+
+    $router->add("/domain/add",function() {
+        require("../index.php");
+        if ($_SERVER['HTTP_HOST'] == $settings['app_url'])
+        {
+            require("../view/addDomain.php");
+        } else {
+          header('location: '.$settings['app_proto'].$settings['app_url']."/domain/add");  
+        }
+    });
+
+    $router->add("/admin",function() {
+        require('../index.php');
+        if ($_SERVER['HTTP_HOST'] == $settings['app_url'])
+        {
+            require("../view/admin/mainPage.php");
+        } else {
+          header('location: '.$settings['app_proto'].$settings['app_url']."/admin");  
+        }
+    });
+
+    $router->add("/admin/settings",function(){
+        require('../index.php');
+        if ($_SERVER['HTTP_HOST'] == $settings['app_url'])
+        {
+            require("../view/admin/settingsPage.php");
+        } else {
+          header('location: '.$settings['app_proto'].$settings['app_url']."/admin/settings");  
+        }
+    });
+
     $router->add("/api/delete", function() {
         require("../index.php");
-        require("../api/delete.php");
+        if ($_SERVER['HTTP_HOST'] == $settings['app_url'])
+        {
+            require("../api/delete.php");
+        } else {
+          header('location: '.$settings['app_proto'].$settings['app_url']."/api/delete");  
+        }
     });
 
     $router->add("/api/report", function() {
         require("../index.php");
-        require("../api/report.php");
+        if ($_SERVER['HTTP_HOST'] == $settings['app_url'])
+        {
+            require("../api/report.php");
+        } else {
+          header('location: '.$settings['app_proto'].$settings['app_url']."/api/report");  
+        }
+        
     });
 
     $router->add("/(.*)", function() {
