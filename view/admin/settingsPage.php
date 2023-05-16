@@ -6,6 +6,13 @@ $userdb = $conn->query("SELECT * FROM atoropics_users WHERE api_key = '" . mysql
 if ($userdb['admin'] == "false") {
     header('location: /');
 }
+if (isset($_POST['update_settings'])) {
+    $app_name = $_POST['app:name'];
+    $app_logo = $_POST['app:logo'];
+    mysqli_query($conn, "UPDATE `atoropics_settings` SET `app_name` = '".$app_name."' WHERE `atoropics_settings`.`id` = 1;");
+    mysqli_query($conn, "UPDATE `atoropics_settings` SET `app_logo` = '".$app_logo."' WHERE `atoropics_settings`.`id` = 1;");
+    header('location: /admin/settings');
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -123,9 +130,9 @@ if ($userdb['admin'] == "false") {
         </aside>
         <div class="content-wrapper" style="min-height: 888px;">
             <section class="content-header">
-                <h1>Panel Settings<small>Configure Pterodactyl to your liking.</small></h1>
+                <h1>Settings<small>Configure AtoroPics to your liking.</small></h1>
                 <ol class="breadcrumb">
-                    <li><a href="https://gamepanel.mythicalsystems.tech/admin">Admin</a></li>
+                    <li><a href="/admin">Admin</a></li>
                     <li class="active">Settings</li>
                 </ol>
             </section>
@@ -139,10 +146,10 @@ if ($userdb['admin'] == "false") {
                         <div class="nav-tabs-custom nav-tabs-floating">
                             <ul class="nav nav-tabs">
                                 <li class="active"><a
-                                        href="https://gamepanel.mythicalsystems.tech/admin/settings">General</a></li>
-                                <li><a href="https://gamepanel.mythicalsystems.tech/admin/settings/mail">Mail</a></li>
+                                        href="/admin/settings">General</a></li>
+                                <li><a href="/admin/settings/mail">Mail</a></li>
                                 <li><a
-                                        href="https://gamepanel.mythicalsystems.tech/admin/settings/advanced">Advanced</a>
+                                        href="/admin/settings/advanced">Advanced</a>
                                 </li>
                             </ul>
                         </div>
@@ -154,56 +161,27 @@ if ($userdb['admin'] == "false") {
                             <div class="box-header with-border">
                                 <h3 class="box-title">Panel Settings</h3>
                             </div>
-                            <form action="https://gamepanel.mythicalsystems.tech/admin/settings" method="POST">
+                            <form action="/admin/settings" method="POST">
                                 <div class="box-body">
                                     <div class="row">
                                         <div class="form-group col-md-4">
                                             <label class="control-label">Company Name</label>
                                             <div>
-                                                <input type="text" class="form-control" name="app:name"
-                                                    value="MythicalSystems">
-                                                <p class="text-muted"><small>This is the name that is used throughout
-                                                        the panel and in emails sent to clients.</small></p>
+                                                <input type="text" class="form-control" name="app:name" value="<?= $settings['app_name'] ?>">
+                                                <p class="text-muted"><small>This is the name that is used throughout the panel and in emails sent to clients.</small></p>
                                             </div>
                                         </div>
                                         <div class="form-group col-md-4">
-                                            <label class="control-label">Require 2-Factor Authentication</label>
+                                            <label class="control-label">Company Logo</label>
                                             <div>
-                                                <div class="btn-group" data-toggle="buttons">
-                                                    <label class="btn btn-primary ">
-                                                        <input type="radio" name="pterodactyl:auth:2fa_required"
-                                                            autocomplete="off" value="0"> Not Required
-                                                    </label>
-                                                    <label class="btn btn-primary  active ">
-                                                        <input type="radio" name="pterodactyl:auth:2fa_required"
-                                                            autocomplete="off" value="1" checked=""> Admin Only
-                                                    </label>
-                                                    <label class="btn btn-primary ">
-                                                        <input type="radio" name="pterodactyl:auth:2fa_required"
-                                                            autocomplete="off" value="2"> All Users
-                                                    </label>
-                                                </div>
-                                                <p class="text-muted"><small>If enabled, any account falling into the
-                                                        selected grouping will be required to have 2-Factor
-                                                        authentication enabled to use the Panel.</small></p>
-                                            </div>
-                                        </div>
-                                        <div class="form-group col-md-4">
-                                            <label class="control-label">Default Language</label>
-                                            <div>
-                                                <select name="app:locale" class="form-control">
-                                                    <option value="en" selected="">English</option>
-                                                </select>
-                                                <p class="text-muted"><small>The default language to use when rendering
-                                                        UI components.</small></p>
+                                                <input type="text" class="form-control" name="app:logo" value="<?= $settings['app_logo'] ?>">
+                                                <p class="text-muted"><small>This is the logo that is used to display the favicon and in the ui.</small></p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="box-footer">
-                                    <input type="hidden" name="_token" value="guNk2uEtCD2lMUFuzutZ43NeGQSG0RMPD5a9kdJw">
-                                    <button type="submit" name="_method" value="PATCH"
-                                        class="btn btn-sm btn-primary pull-right">Save</button>
+                                    <button type="submit" name="update_settings" class="btn btn-sm btn-primary pull-right">Save</button>
                                 </div>
                             </form>
                         </div>

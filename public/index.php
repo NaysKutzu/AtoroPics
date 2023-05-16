@@ -130,6 +130,28 @@ try {
           header('location: '.$settings['app_proto'].$settings['app_url']."/admin/settings");  
         }
     });
+    
+
+    $router->add("/admin/settings/advanced",function(){
+        require('../index.php');
+        if ($_SERVER['HTTP_HOST'] == $settings['app_url'])
+        {
+            require("../view/admin/advancedsettingsPage.php");
+        } else {
+          header('location: '.$settings['app_proto'].$settings['app_url']."/admin/settings/advanced");  
+        }
+    });
+
+
+    $router->add("/admin/settings/mail",function(){
+        require('../index.php');
+        if ($_SERVER['HTTP_HOST'] == $settings['app_url'])
+        {
+            require("../view/admin/emailPage.php");
+        } else {
+          header('location: '.$settings['app_proto'].$settings['app_url']."/admin/settings/mail");  
+        }
+    });
 
     $router->add("/api/delete", function() {
         require("../index.php");
