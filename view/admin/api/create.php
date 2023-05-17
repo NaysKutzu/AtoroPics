@@ -6,9 +6,10 @@ $userdb = $conn->query("SELECT * FROM atoropics_users WHERE api_key = '" . mysql
 if ($userdb['admin'] == "false") {
     header('location: /');
 }
-if (isset($_GET['revoke-key'])) {
-    $keyid = $_GET['revoke-key'];
-    mysqli_query($conn, "DELETE FROM atoropics_apikeys WHERE `atoropics_apikeys`.`id` = ".$keyid."");
+if (isset($_POST['submit'])) {
+    $keyname = $_POST['api:key:name'];
+    $api_key = "atoropics_" . generateRandomString(45);
+    mysqli_query($conn, "INSERT INTO `atoropics_apikeys` (`api_key`, `owner_api_key`, `name`) VALUES ('" . $api_key . "', '" . $_SESSION["api_key"] . "', '" . $keyname . "')");
     header('location: /admin/api');
 }
 ?>
@@ -83,13 +84,15 @@ if (isset($_GET['revoke-key'])) {
                 </div>
             </nav>
         </header>
-        <?php require('ui/navBar.php'); ?>
+        <?php require(__DIR__ . '../../ui/navBar.php'); ?>
+
         <div class="content-wrapper" style="min-height: 888px;">
             <section class="content-header">
-                <h1>Application API<small>Control access credentials for managing this System via the API.</small></h1>
+                <h1>Application API<small>Create a new application API key.</small></h1>
                 <ol class="breadcrumb">
                     <li><a href="/admin">Admin</a></li>
-                    <li class="active">Application API</li>
+                    <li><a href="/admin/api">Application API</a></li>
+                    <li class="active">New Credentials</li>
                 </ol>
             </section>
             <section class="content">
@@ -97,55 +100,27 @@ if (isset($_GET['revoke-key'])) {
                     <div class="col-xs-12">
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="box box-primary">
-                            <div class="box-header with-border">
-                                <h3 class="box-title">Credentials List</h3>
-                                <div class="box-tools">
-                                    <a href="/admin/api/new" class="btn btn-sm btn-primary">Create New</a>
+                <div class="row text-center">
+                    <form method="POST">
+                        <div class="col-xs-12">
+                            <div class="box box-primary">
+                                <center>
+                                <div class="box-body">
+                                    <div class="form-group">
+                                        <label class="control-label" for="memoField">Name <span
+                                                class="field-required"></span></label>
+                                        <input id="memoField" type="text" name="api:key:name" class="form-control">
+                                    </div>
+                                    <button type="submit" name="submit" class="btn btn-success btn-sm pull-right">Create Credentials</button>
                                 </div>
+                                </center>
                             </div>
-                            <?php
-                            $ownerApiKey = $_COOKIE['api_key'];
-                            $sql = "SELECT * FROM atoropics_apikeys WHERE owner_api_key = '$ownerApiKey'";
-                            $result = $conn->query($sql);
-
-                            if ($result->num_rows > 0) {
-                                echo '<div class="box-body table-responsive no-padding">';
-                                echo '<table class="table table-hover">';
-                                echo '<tbody>';
-                                echo '<tr>';
-                                echo '<th>Key</th>';
-                                echo '<th>Name</th>';
-                                echo '<th>Created</th>';
-                                echo '<th></th>';
-                                echo '</tr>';
-
-                                while ($row = $result->fetch_assoc()) {
-                                    echo '<tr>';
-                                    echo '<td><code>' . $row['api_key'] . '</code></td>';
-                                    echo '<td>' . $row['name'] . '</td>';
-                                    echo '<td>' . $row['created'] . '</td>';
-                                    echo '<td>';
-                                    echo '<a href="?revoke-key=' . $row['id'] . '" data-action="revoke-key" data-attr="ptla_JukLwP4veXF">';
-                                    echo '<i class="fa fa-trash-o text-danger"></i>';
-                                    echo '</a>';
-                                    echo '</td>';
-                                    echo '</tr>';
-                                }
-
-                                echo '</tbody>';
-                                echo '</table>';
-                                echo '</div>';
-                            } else {
-                                echo "<br><p class='text-center'>No API keys found for the specified owner.</p><br>";
-                            }
-                            ?>
                         </div>
-                    </div>
+                    </form>
                 </div>
+                
             </section>
+            
         </div>
 
         <footer class="main-footer">

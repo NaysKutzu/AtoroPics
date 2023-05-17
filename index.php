@@ -67,5 +67,18 @@ function logClient($message) {
     $response = curl_exec($ch);
 }
 
+//
+// GENERATE STRING
+//
+function generateRandomString($length) {
+    $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    $string = '';
 
+    for ($i = 0; $i < $length; $i++) {
+        $randomIndex = mt_rand(0, strlen($characters) - 1);
+        $string .= $characters[$randomIndex];
+    }
+
+    return $string;
+}
 ?>

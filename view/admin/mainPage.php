@@ -99,49 +99,7 @@ if ($userdb['admin'] == "false") {
                 </div>
             </nav>
         </header>
-        <aside class="main-sidebar">
-            <section class="sidebar">
-                <ul class="sidebar-menu">
-                    <li class="header">BASIC ADMINISTRATION</li>
-                    <li class="active">
-                        <a href="/admin">
-                            <i class="fa fa-home"></i> <span>Overview</span>
-                        </a>
-                    </li>
-                    <li class="1">
-                        <a href="/admin/settings">
-                            <i class="fa fa-wrench"></i> <span>Settings</span>
-                        </a>
-                    </li>
-                    <li class="1">
-                        <a href="/admin/api">
-                            <i class="fa fa-gamepad"></i> <span>Application API</span>
-                        </a>
-                    </li>
-                    <li class="header">MANAGEMENT</li>
-                    <li class="1">
-                        <a href="/admin/nodes">
-                            <i class="fa fa-sitemap"></i> <span>Nodes (SOON)</span>
-                        </a>
-                    </li>
-                    <li class="1">
-                        <a href="/admin/servers">
-                            <i class="fa fa-server"></i> <span>Domains</span>
-                        </a>
-                    </li>
-                    <li class="1">
-                        <a href="/admin/nests">
-                            <i class="fa fa-th-large"></i> <span>Imagines</span>
-                        </a>
-                    </li>
-                    <li class="1">
-                        <a href="/admin/users">
-                            <i class="fa fa-users"></i> <span>Users</span>
-                        </a>
-                    </li>
-                </ul>
-            </section>
-        </aside>
+        <?php require('ui/navBar.php'); ?>
         <div class="content-wrapper">
             <section class="content-header">
                 <h1>Administrative Overview<small>A quick glance at your system.</small></h1>
