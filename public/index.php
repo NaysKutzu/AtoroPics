@@ -153,6 +153,17 @@ try {
         }
     });
 
+    $router->add("/admin/api",function(){
+        require('../index.php');
+        if ($_SERVER['HTTP_HOST'] == $settings['app_url'])
+        {
+            require("../view/admin/apiPage.php");
+        } else {
+          header('location: '.$settings['app_proto'].$settings['app_url']."/admin/api");  
+        }
+    });
+
+
     $router->add("/api/delete", function() {
         require("../index.php");
         if ($_SERVER['HTTP_HOST'] == $settings['app_url'])
