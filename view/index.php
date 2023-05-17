@@ -1,5 +1,5 @@
 <?php 
-$enable_template= "true";
+$enable_template= "false";
 $protocol = 'http://';
 $domain = $_SERVER['HTTP_HOST'];
 $currentURL = $protocol . $domain;

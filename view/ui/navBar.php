@@ -75,7 +75,7 @@
                     </path>
                   </svg>
                   <span class="nav-link-title">
-                    &nbsp; Domains
+                    &nbsp; Custom Domain
                   </span>
                 </a>
               </li>

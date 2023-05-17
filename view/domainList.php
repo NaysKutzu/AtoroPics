@@ -127,9 +127,6 @@ if (isset($_GET['del_domain'])) {
                                   <th>Description</th>
                                   <th>Creation Date</th>
                                   <th>Action</th>
-                                  <th colspan="2" style="text-align: right;">
-                                    <a href="/domain/add" class="btn btn-sm btn-primary">Add Domain</a>
-                                  </th>
                                 </tr>
                               </thead>
                               <tbody>';
@@ -151,8 +148,6 @@ if (isset($_GET['del_domain'])) {
                                         <td>
                                             <a href="?del_domain='.$row['id'].'&domainname='.$row['domain'].'" class="btn btn-sm btn-danger">Delete</a>
                                         </td>
-                                        <td></td>
-                                        <td></td>
                                       </tr>';
                             }
                             
@@ -164,8 +159,9 @@ if (isset($_GET['del_domain'])) {
                     <tbody>
                       <tr>
                         <td colspan="6" style="text-align: center;">
-                          <p style="font-size: 18px; margin-bottom: 10px;">No domains found.</p>
-                          <p style="font-size: 18px; margin-bottom: 10px;">Let`s fix that and add your domain.</p>
+                          <p style=" margin-bottom: 10px;">No domain found.</p>
+                          <p style="margin-bottom: 10px;">Let`s fix that and add your domain.</p>
+                          <p style="margin-bottom: 10px;">To add a domain you need to make sure that the domain / subdomain points to <code>'.$settings['app_url'].'</code>. This must be a CNAME and with CloudFlare proxy off.</p>
                           <br>
                           <br>
                           <a style="margin-bottom: 10px;"href="/domain/add" class="btn btn-primary" style="margin-bottom: 20px;">Add domain</a>
