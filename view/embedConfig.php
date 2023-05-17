@@ -29,7 +29,18 @@ if (isset($_POST['submit'])) {
   header('location: /config');
 }
 
+$query = "SELECT * FROM `atoropics_domains` WHERE `ownerkey` = '".$_SESSION['api_key']."'";
+$result = mysqli_query($conn, $query);
 
+$options = '';
+if (mysqli_num_rows($result) > 0) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        $domain = $row['domain'];
+        $options .= "<option value='$domain'>$domain</option>";
+    }
+} else {
+    $options = "<option disabled>No domains found</option>";
+}
 ?>
 
 <!doctype html>
@@ -129,6 +140,12 @@ if (isset($_POST['submit'])) {
                               <label class="form-label">Image Description</label>
                               <textarea type="text" class="form-control" name="desc" rows="4" name="desc" placeholder="My cool image hosting site..." required><?= $embed_desc ?></textarea>
                             </div>
+                            <div class="mb-3">
+                              <label class="form-label">Domain</label>
+                              <select class="form-select">
+                              <?php echo $options; ?>
+                              </select>
+                            </div>
                             <label class="form-label">Image Embed Colour</label>
                             <div class="input-group mt-2">
                               <input type="text" class="form-control" style="background-color: #26334c; text-align: center;" id="embedColour-text" name="embedColour" readonly>
@@ -144,7 +161,7 @@ if (isset($_POST['submit'])) {
                     </div>
                     <br>
                      <div class="card-footer text-end">
-                     <a href="/api/config" class="btn btn-secondary">Download Config</a>
+                        <a href="/api/config" class="btn btn-secondary">Download Config</a>
                         <button type="submit" name="submit" class="btn btn-primary">Submit</button>
                      </div>
                   </form>

@@ -13,6 +13,9 @@ if (isset($_GET['del_domain'])) {
   $result = mysqli_query($conn, $query);
   if (mysqli_num_rows($result) > 0) {
       mysqli_query($conn,"DELETE FROM atoropics_domains WHERE `atoropics_domains`.`id` = '$domain_id'");
+      $disableCommand = 'sudo a2dissite '.$domainname.'.conf';
+      ssh2_exec($connection, $disableCommand);
+      ssh2_disconnect($connection);
       header('location: /domains');
       exit;
   } else {
@@ -95,7 +98,15 @@ if (isset($_GET['del_domain'])) {
     <?php 
     include('ui/navBar.php');
     ?>
-    
+    <?php 
+    if (isset($_GET['msg'])) {
+      ?>
+      <script>
+      alert("Thanks for adding your domain please wait 5m to take effect!\nThen redownload your config from embed config");
+      </script>
+      <?php
+    }    
+    ?>
     <div class="page-wrapper">
       <!-- Page body -->
       <div class="page-body">

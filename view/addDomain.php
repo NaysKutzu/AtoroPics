@@ -1,6 +1,8 @@
 <?php
-ini_set('display_errors', 0);
-ini_set('display_startup_errors', 0);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 require('../class/session.php');
 $userdb = $conn->query("SELECT * FROM atoropics_users WHERE api_key = '" . mysqli_real_escape_string($conn, $_SESSION["api_key"]) . "'")->fetch_array();
 require('../class/maintenance.php');
@@ -10,7 +12,19 @@ $username = $userdb['username'];
 if (isset($_POST['submit'])) {
     $domain_name = $_POST['domain'];
     $domain_description = $_POST['description'];
-    
+    $query = "SELECT * FROM `atoropics_domains` WHERE `ownerkey`='".$_SESSION['api_key']."';";
+    $result = mysqli_query($conn, $query);
+    if (mysqli_num_rows($result) > 0) {
+        ?>
+        <script>
+            alert("Please do not use more then 1 domain");
+        </script>
+        <?php
+        exit('<center><h1>I\'m sorry but you can\'t have more than 1 domain</h1><br><a href="#" onClick="window.location.reload();">Retry</a><br><a href="/domains">Back</a></center>');
+    } else {
+       
+    }
+
     if ($domain_description == "" || $domain_name == "") {
         echo '<script>alert("I\'m sorry, but it cannot be blank.");</script>';
     } else {
@@ -18,14 +32,69 @@ if (isset($_POST['submit'])) {
         $ip = $_ENV['SSH_IP'];
         $encoded_domain = htmlspecialchars($domain_name, ENT_QUOTES, 'UTF-8');
         $encoded_ip = htmlspecialchars($ip, ENT_QUOTES, 'UTF-8');
-        
-        if ($domain_ip === $ip) {
-            //NEXT
+        $siteConfig = '<VirtualHost *:80>
+  ServerName '.$domain_name.'
 
-            mysqli_query($conn, "INSERT INTO `atoropics_domains` (`domain`, `description`, `ownerkey`, `enabled`) VALUES ('$domain_name', '$domain_description', '".$_SESSION["api_key"]."', 'true');");
-            header('location: /domains');
+  RewriteEngine On
+  RewriteCond %{HTTPS} !=on
+  RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R,L] 
+</VirtualHost>
+
+<VirtualHost *:443>
+  ServerName '.$domain_name.'
+  DocumentRoot "/var/www/AtoroPics/public"
+
+  AllowEncodedSlashes On
+  
+  php_value upload_max_filesize 100M
+  php_value post_max_size 100M
+
+  <Directory "/var/www/AtoroPics/public">
+    Require all granted
+    AllowOverride all
+  </Directory>
+
+  SSLEngine on
+  SSLCertificateFile /etc/letsencrypt/live/'.$domain_name.'/fullchain.pem
+  SSLCertificateKeyFile /etc/letsencrypt/live/'.$domain_name.'/privkey.pem
+</VirtualHost>';
+$configFileName = '/etc/apache2/sites-available/'.$domain_name.'.conf';
+
+        if ($domain_ip === $ip) {
+            $checkCommand = 'sudo ls /etc/letsencrypt/live/'.$domain_name;
+            $checkStream = ssh2_exec($connection, $checkCommand);
+            stream_set_blocking($checkStream, true);
+            $checkOutput = stream_get_contents($checkStream);
+            if (strpos($checkOutput, 'cert.pem') !== false && strpos($checkOutput, 'privkey.pem') !== false && strpos($checkOutput, 'fullchain.pem') !== false && strpos($checkOutput, 'chain.pem') !== false) {
+                echo 'Certificate already exists. Skipping Certbot command.';
+                //UGH PASTE THE CODE AGAIN
+                $createCommand = 'echo "' . $siteConfig . '" | sudo tee ' . $configFileName;
+                ssh2_exec($connection, $createCommand);
+                $enableCommand = 'sudo a2ensite '.$domain_name.'.conf';
+                ssh2_exec($connection, $enableCommand);
+
+                ssh2_disconnect($connection);
+                mysqli_query($conn, "INSERT INTO `atoropics_domains` (`domain`, `description`, `ownerkey`, `enabled`) VALUES ('$domain_name', '$domain_description', '".$_SESSION["api_key"]."', 'true');");
+                header('location: /domains?msg=done');
+            } else {
+                try {
+                    $command = "sudo certbot certonly --apache --non-interactive --agree-tos --register-unsafely-without-email -d ".$domain_name;
+                    ssh2_exec($connection, $command);
+                    $createCommand = 'echo "' . $siteConfig . '" | sudo tee ' . $configFileName;
+                    ssh2_exec($connection, $createCommand);
+                    $enableCommand = 'sudo a2ensite '.$domain_name.'.conf';
+                    ssh2_exec($connection, $enableCommand);
+                    ssh2_disconnect($connection);
+                    mysqli_query($conn, "INSERT INTO `atoropics_domains` (`domain`, `description`, `ownerkey`, `enabled`) VALUES ('$domain_name', '$domain_description', '".$_SESSION["api_key"]."', 'true');");
+                    header('location: /domains?msg=done');
+                } catch (Exception $e) {
+                    echo 'An error occurred: ' . $e->getMessage();
+                    echo 'Certbot command failed. Error output: ' . $output;
+                    die('<center><h1>Certbot command failed. Error output:</h1><br><code>'.$output.'</code><br><a href="#" onClick="window.location.reload();">Retry</a><br><a href="/domains">Back</a></center>');    
+                }
+            }
         } else {
-            die('<font color="red"><center><h1>The domain <code>' . $encoded_domain . '</code> does not point to our server. Please point your domain using a CNAME to <code>'.$settings['app_url'].'</code> after that please refresh the page to continue adding the domain.</h1></font><h3>DO NOT USE CLOUDFLARE PROXY FOR THIS. IT WILL BREAK YOUR UPLOAD SCRIPT</h3><a href="#" onClick="window.location.reload();">Retry</a><br><a href="/domains">Back</a></center>');
+            die('<font color="red"><center><h1>The domain <code>' . $encoded_domain . '</code> does not point to our server. Please point your domain using a CNAME to <code>'.$settings['app_url'].'</code> after that please refresh the page to continue adding the domain.</h1></font><h3>DO NOT USE CLOUDFLARE PROXY FOR THIS. IT WILL BREAK YOUR UPLOAD SCRIPT</h3><h4>This will take some time to update so please wait while you try again</h4><a href="#" onClick="window.location.reload();">Retry</a><br><a href="/domains">Back</a></center>');
         }
         return;
         

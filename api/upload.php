@@ -53,7 +53,17 @@ if (isset($_POST['api_key']))
                     );
                     $json = json_encode($data, JSON_PRETTY_PRINT);
                     file_put_contents("../public/storage/json/".$imgname_c.'.json', $json);
-                    echo $settings['app_proto'].$settings['app_url']."/i?i=".$imgname_c;
+                    $query = "SELECT domain FROM atoropics_domains WHERE ownerkey = '".$userdb['api_key']."'";
+                    $result = $conn->query($query);
+                    if ($result) {
+                      $row = $result->fetch_assoc();
+                      $domain = $row['domain'];
+                      echo $settings['app_proto'].$domain."/i?i=".$imgname_c;
+                    }
+                    else
+                    {
+                        echo $settings['app_proto'].$settings['app_url']."/i?i=".$imgname_c;
+                    }
                     $apikey = $_POST['api_key'];
                     $conn->query("INSERT INTO atoropics_imgs (name, owner_key, size, storage_folder) VALUES ('$imgname_c', '$apikey', '$filesize', '$imgurl')");
                 }else{

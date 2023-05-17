@@ -1,16 +1,28 @@
 <?php
 header('Content-Type: application/json');
-$lifetime = 30 * 24 * 60 * 60; 
-ini_set('session.gc_maxlifetime', $lifetime);
-session_set_cookie_params($lifetime);
-session_start();
-if (!isset($_SESSION['loggedin'])) {
-    header("Location: ../../auth/login");
-}
-
+require('../class/session.php');
 
 $userdb = $conn->query("SELECT * FROM atoropics_users WHERE api_key = '" . mysqli_real_escape_string($conn, $_SESSION["api_key"]) . "'")->fetch_array();
-
+$query = "SELECT domain FROM atoropics_domains WHERE ownerkey = '".$_SESSION['api_key']."'";
+$result = $conn->query($query);
+if ($result) {
+  $row = $result->fetch_assoc();
+  $domain = $row['domain'];
+$sharexconfigfile = '{
+  "Version": "15.0.0",
+  "Name": "'.$settings['app_name'].'",
+  "DestinationType": "ImageUploader, TextUploader, FileUploader",
+  "RequestMethod": "POST",
+  "RequestURL": "https://'.$domain.'/api/upload",
+  "Body": "MultipartFormData",
+  "Arguments": {
+    "api_key": "'.$userdb["api_key"].'"
+  },
+  "FileFormName": "file",
+  "URL": "{response}"
+}
+';
+} else {
 $sharexconfigfile = '{
   "Version": "15.0.0",
   "Name": "'.$settings['app_name'].'",
@@ -25,6 +37,8 @@ $sharexconfigfile = '{
   "URL": "{response}"
 }
 ';
+}
+
 $filenamet = time();
 $file = $settings['app_name'].'_'.$userdb['username'].'_SharexConfig.sxcu';
 file_put_contents($file, $sharexconfigfile);
