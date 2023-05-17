@@ -2,12 +2,23 @@
 ini_set('display_errors', 0);
 ini_set('display_startup_errors', 0);
 require('../class/session.php');
-
-
 $userdb = $conn->query("SELECT * FROM atoropics_users WHERE api_key = '" . mysqli_real_escape_string($conn, $_SESSION["api_key"]) . "'")->fetch_array();
+require('../class/maintenance.php');
 $usrname = $userdb['username'];
 $username = $userdb['username'];
-
+if (isset($_GET['del_domain'])) {
+  $domain_id = $_GET['del_domain'];
+  $domainname = $_GET['domainname'];
+  $query = "SELECT * FROM `atoropics_domains` WHERE `ownerkey`='".$_SESSION['api_key']."' AND `id`='".$domain_id."' AND `domain`='".$domainname."';";
+  $result = mysqli_query($conn, $query);
+  if (mysqli_num_rows($result) > 0) {
+      mysqli_query($conn,"DELETE FROM atoropics_domains WHERE `atoropics_domains`.`id` = '$domain_id'");
+      header('location: /domains');
+      exit;
+  } else {
+      echo "<script>alert('Hey that's not nice of you this is not your domain');</script>";
+  }
+}
 ?>
 <!doctype html>
 <!--
@@ -27,7 +38,6 @@ $username = $userdb['username'];
   <title>
     <?= $settings['app_name'] ?> | Domains
   </title>
-  <script defer data-api="/stats/api/event" data-domain="preview.tabler.io" src="/stats/js/script.js"></script>
   <meta name="msapplication-TileColor" content="" />
   <meta name="theme-color" content="" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -101,29 +111,40 @@ $username = $userdb['username'];
                       echo '<table class="table table-vcenter card-table table-striped">
                               <thead>
                                 <tr>
-                                  <th>ID</th>
+                                  <th>Status</th>
                                   <th>Domain Name</th>
+                                  <th>Description</th>
                                   <th>Creation Date</th>
                                   <th>Action</th>
                                   <th colspan="2" style="text-align: right;">
-                                    <a href="#" class="btn btn-sm btn-primary">Add Domain</a>
+                                    <a href="/domain/add" class="btn btn-sm btn-primary">Add Domain</a>
                                   </th>
                                 </tr>
                               </thead>
                               <tbody>';
                   
-                      while ($row = mysqli_fetch_assoc($result)) {
-                          echo '<tr>
-                                  <td>' . $row['id'] . '</td>
-                                  <td><code>' . $row['domain'] . '</code></td>
-                                  <td>' . $row['date'] . '</td>
-                                  <td>
-                                      <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                                  </td>
-                                  <td></td>
-                                  <td></td>
-                                </tr>';
-                      }
+                              while ($row = mysqli_fetch_assoc($result)) {
+                                echo '<tr>
+                                        <td>';
+                            
+                                if ($row['enabled'] == true) {
+                                    echo 'Working';
+                                } else {
+                                    echo 'Suspendet';
+                                }
+                            
+                                echo '</td>
+                                        <td><code>' . $row['domain'] . '</code></td>
+                                        <td>' . $row['description'] . '</td>
+                                        <td>' . $row['created-date'] . '</td>
+                                        <td>
+                                            <a href="?del_domain='.$row['id'].'&domainname='.$row['domain'].'" class="btn btn-sm btn-danger">Delete</a>
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                      </tr>';
+                            }
+                            
                   
                       echo '</tbody>
                             </table>';
@@ -136,7 +157,7 @@ $username = $userdb['username'];
                           <p style="font-size: 18px; margin-bottom: 10px;">Let`s fix that and add your domain.</p>
                           <br>
                           <br>
-                          <a style="margin-bottom: 10px;"href="#" class="btn btn-primary" style="margin-bottom: 20px;">Add domain</a>
+                          <a style="margin-bottom: 10px;"href="/domain/add" class="btn btn-primary" style="margin-bottom: 20px;">Add domain</a>
                         </td>
                       </tr>
                     </tbody>

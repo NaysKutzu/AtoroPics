@@ -20,6 +20,7 @@ DROP TABLE IF EXISTS `atoropics_domains`;
 CREATE TABLE `atoropics_domains` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `domain` text DEFAULT NULL,
+  `description` text NOT NULL DEFAULT 'The default description of the domain',
   `ownerkey` text DEFAULT NULL,
   `enabled` enum('true','false','suspendet') NOT NULL,
   `created-date` datetime NOT NULL DEFAULT current_timestamp(),
@@ -72,6 +73,7 @@ CREATE TABLE `atoropics_settings` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `app_name` text NOT NULL DEFAULT 'AtoroPics',
   `app_logo` text NOT NULL DEFAULT 'https://avatars.githubusercontent.com/u/118304455',
+  `app_maintenance` enum('false','true') NOT NULL DEFAULT 'false',
   `app_proto` varchar(255) NOT NULL,
   `app_url` varchar(255) NOT NULL,
   `enable_registration` enum('true','false') NOT NULL,

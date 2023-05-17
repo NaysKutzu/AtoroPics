@@ -101,6 +101,16 @@ try {
         }
     });
 
+    $router->add("/maintenance", function() {
+        require("../index.php");
+        if ($_SERVER['HTTP_HOST'] == $settings['app_url'])
+        {
+            require("../view/ui/maintenance.php");
+        } else {
+          header('location: '.$settings['app_proto'].$settings['app_url']."/maintenance");  
+        }
+    });
+
     $router->add("/domain/add",function() {
         require("../index.php");
         if ($_SERVER['HTTP_HOST'] == $settings['app_url'])

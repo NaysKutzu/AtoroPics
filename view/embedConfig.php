@@ -5,8 +5,8 @@ require('../class/session.php');
 
 
 $userdb = $conn->query("SELECT * FROM atoropics_users WHERE api_key = '" . mysqli_real_escape_string($conn, $_SESSION["api_key"]) . "'")->fetch_array();
+require('../class/maintenance.php');
 $usrname = $userdb['username'];
-
 $username = $userdb['username'];
 $desc = $userdb['embed_desc'];
 $desc_title = $userdb['embed_title'];

@@ -9,6 +9,7 @@ if ($userdb['admin'] == "false") {
 
 if (isset($_POST['saveadvsettings'])) {
     $app_proto = $_POST['atoropics:settings:proto'];
+    $app_maintenance = $_POST['atoropics:settings:maintenance'];
     $app_url = $_POST['atoropics:settings:url'];
     $app_registration = $_POST['registration:enabled'];
     $app_recaptcha = $_POST['recaptcha:enabled'];
@@ -17,6 +18,7 @@ if (isset($_POST['saveadvsettings'])) {
     $app_discord_invite = $_POST['discord:server:invite'];
     $app_discord_webhook = $_POST['discord:webhook'];
     mysqli_query($conn, "UPDATE `atoropics_settings` SET `app_proto` = '".$app_proto."' WHERE `atoropics_settings`.`id` = 1;");
+    mysqli_query($conn, "UPDATE `atoropics_settings` SET `app_maintenance` = '".$app_maintenance."' WHERE `atoropics_settings`.`id` = 1;");
     mysqli_query($conn, "UPDATE `atoropics_settings` SET `app_url` = '".$app_url."' WHERE `atoropics_settings`.`id` = 1;");
     mysqli_query($conn, "UPDATE `atoropics_settings` SET `enable_registration` = '".$app_registration."' WHERE `atoropics_settings`.`id` = 1;");
     mysqli_query($conn, "UPDATE `atoropics_settings` SET `enable_rechapa2` = '".$app_recaptcha."' WHERE `atoropics_settings`.`id` = 1;");
@@ -133,7 +135,33 @@ if (isset($_POST['saveadvsettings'])) {
                                 </div>
                                 <div class="box-body">
                                     <div class="row">
-                                        <div class="form-group col-md-6">
+                                    <div class="form-group col-md-2">
+                                            <label class="control-label">App Maintenance</label>
+                                            <div>
+                                                <?php 
+                                                if ($settings['app_maintenance'] == "false") {
+                                                    ?>
+                                                    <select class="form-control" name="atoropics:settings:maintenance">
+                                                    <option value="false">Off</option>
+                                                    <option value="true">On</option>
+                                                    </select>
+                                                    <?php
+                                                }
+                                                else
+                                                {
+                                                    ?>
+                                                    <select class="form-control" name="atoropics:settings:maintenance">
+                                                    <option value="true">On</option>
+                                                    <option value="false">Off</option>
+                                                    </select>
+                                                    <?php
+                                                }
+                                                
+                                                ?>
+                                                <p class="text-muted small">The protocol for the app!</p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-5">
                                             <label class="control-label">App Protocol</label>
                                             <div>
                                                 <?php 
@@ -159,7 +187,7 @@ if (isset($_POST['saveadvsettings'])) {
                                                 <p class="text-muted small">The protocol for the app!</p>
                                             </div>
                                         </div>
-                                        <div class="form-group col-md-6">
+                                        <div class="form-group col-md-5">
                                             <label class="control-label">App Domain</label>
                                             <div>
                                                 <input type="text" required="" class="form-control"

@@ -56,7 +56,7 @@
                 </a>
               </li>
               <li class="nav-item <?php
-              if ($current_url == "/domains")
+              if ($current_url == "/domains" || $current_url == "/domain/add")
               {
                 echo "active";
               }
