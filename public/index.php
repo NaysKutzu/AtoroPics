@@ -174,6 +174,28 @@ try {
         
     });
 
+    $router->add("/admin/users", function() {
+        require("../index.php");
+        if ($_SERVER['HTTP_HOST'] == $settings['app_url'])
+        {
+            require("../view/admin/usersPage.php");
+        } else {
+          header('location: '.$settings['app_proto'].$settings['app_url']."/admin/users");  
+        }
+        
+    });
+
+    $router->add("/admin/nodes", function() {
+        require("../index.php");
+        if ($_SERVER['HTTP_HOST'] == $settings['app_url'])
+        {
+            echo '<font color="red">This thing is not done yet do not try to bypass or enable this function yet!!</font>';
+        } else {
+          header('location: '.$settings['app_proto'].$settings['app_url']."/admin/nodes");  
+        }
+        
+    });
+
     $router->add("/api/delete", function() {
         require("../index.php");
         if ($_SERVER['HTTP_HOST'] == $settings['app_url'])

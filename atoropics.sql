@@ -1,6 +1,21 @@
 
 
 
+DROP TABLE IF EXISTS `atoropics_apikeys`;
+CREATE TABLE `atoropics_apikeys` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `api_key` text NOT NULL,
+  `owner_api_key` text NOT NULL,
+  `name` text NOT NULL,
+  `created` datetime NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+LOCK TABLES `atoropics_apikeys` WRITE;
+UNLOCK TABLES;
+
+
 DROP TABLE IF EXISTS `atoropics_domains`;
 CREATE TABLE `atoropics_domains` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -72,7 +87,7 @@ CREATE TABLE `atoropics_settings` (
   `smtp_from` varchar(255) NOT NULL,
   `smtp_from_name` varchar(255) NOT NULL,
   `discord_webhook` varchar(255) NOT NULL,
-  `version` text NOT NULL DEFAULT '1.3.7',
+  `version` text NOT NULL DEFAULT '1.3.6',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -89,15 +104,15 @@ CREATE TABLE `atoropics_users` (
   `email` text NOT NULL,
   `password` text NOT NULL,
   `code` text NOT NULL,
-  `last_ip` text NOT NULL,
-  `register_ip` text NOT NULL,
+  `last_ip` text DEFAULT 'localhost',
+  `register_ip` text DEFAULT 'localhost',
   `api_key` text NOT NULL,
   `admin` enum('false','true') NOT NULL DEFAULT 'false',
-  `embed_title` text NOT NULL,
+  `embed_title` text DEFAULT NULL,
   `embed_small_title` text DEFAULT NULL,
-  `embed_desc` text NOT NULL,
-  `embed_theme` text NOT NULL,
-  `embed_sitename` text NOT NULL,
+  `embed_desc` text DEFAULT NULL,
+  `embed_theme` text DEFAULT NULL,
+  `embed_sitename` text DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
