@@ -49,11 +49,6 @@ try {
         }
     });
 
-    $router->add('/test', function(){
-        require("../index.php");
-        require('../view/test.php');
-    }); 
-
     $router->add('/i', function() {
         require("../index.php");
         require("../view/image/imageEmbed.php");
@@ -191,6 +186,17 @@ try {
             require("../view/admin/usersPage.php");
         } else {
           header('location: '.$settings['app_proto'].$settings['app_url']."/admin/users");  
+        }
+        
+    });
+
+    $router->add("/admin/domains", function() {
+        require("../index.php");
+        if ($_SERVER['HTTP_HOST'] == $settings['app_url'])
+        {
+            require("../view/admin/doaminsPage.php");
+        } else {
+          header('location: '.$settings['app_proto'].$settings['app_url']."/admin/domains");  
         }
         
     });

@@ -1,6 +1,9 @@
 <?php $current_url = $_SERVER['REQUEST_URI'];
 $isUsersPage = (strpos($current_url, "/admin/users") !== false);
 $isSearchPage = (strpos($current_url, "/admin/users") !== false && !empty($search));
+
+$isDomainsPage = (strpos($current_url, "/admin/domains") !== false);
+$isDomainsSearchPage = (strpos($current_url, "/admin/domains") !== false && !empty($search));
 ?>
 
 <aside class="main-sidebar">
@@ -40,7 +43,7 @@ $isSearchPage = (strpos($current_url, "/admin/users") !== false && !empty($searc
                     <i class="fa fa-sitemap"></i> <span>Nodes (SOON)</span>
                 </a>
             </li>
-            <li class="">
+            <li class="<?= ($isDomainsPage || $isDomainsSearchPage) ? 'active' : '' ?>">
                 <a href="/admin/domains">
                     <i class="fa fa-server"></i> <span>Domains</span>
                 </a>
