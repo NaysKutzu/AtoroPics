@@ -46,8 +46,8 @@ $isSearchPage = (strpos($current_url, "/admin/users") !== false && !empty($searc
                 </a>
             </li>
             <li class="">
-                <a href="/admin/imagines">
-                    <i class="fa fa-th-large"></i> <span>Imagines</span>
+                <a href="/admin/reports">
+                    <i class="fa fa-th-large"></i> <span>Reports</span>
                 </a>
             </li>
             <li class="<?= ($isUsersPage || $isSearchPage) ? 'active' : '' ?>">

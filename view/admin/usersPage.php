@@ -137,8 +137,8 @@ $users = $result->fetch_all(MYSQLI_ASSOC);
                                             <th>ID</th>
                                             <th>Email</th>
                                             <th>Username</th>
-                                            <th class="text-center"><span data-toggle="tooltip" data-placement="top"
-                                                    title="Imagines that the users own">Imagines Owned</span></th>
+                                            <!--<th class="text-center"><span data-toggle="tooltip" data-placement="top"
+                                                    title="Imagines that the users own">Imagines Owned</span></th>-->
                                             <th class="text-center"><span data-toggle="tooltip" data-placement="top"
                                                     title="Domains that the user own.">Domains Owned</span></th>
                                             <th></th>
@@ -160,16 +160,20 @@ $users = $result->fetch_all(MYSQLI_ASSOC);
                                                 <td>
                                                     <?= $user['username'] ?>
                                                 </td>
-                                                <td class="text-center">
+                                                <!--<td class="text-center">
                                                     <a href="#">
                                                         <?php
-                                                        $imaginesResult = $conn->query("SELECT COUNT(*) FROM atoropics_imgs WHERE owner_key = '" . $user['api_key'] . "'");
-                                                        $imaginesCount = $imaginesResult->fetch_row()[0];
-                                                        echo $imaginesCount;
+                                                        //$imaginesResult = $conn->query("SELECT COUNT(*) FROM atoropics_imgs WHERE owner_key = '" . $user['api_key'] . "'");
+                                                        //$imaginesCount = $imaginesResult->fetch_row()[0];
+                                                        //echo $imaginesCount;
                                                         ?>
                                                     </a>
-                                                </td>
-                                                <td class="text-center">0</td>
+                                                </td>-->
+                                                <td class="text-center" ><a href="#"> <?php
+                                                        $domainsResult = $conn->query("SELECT COUNT(*) FROM atoropics_domains WHERE ownerkey = '" . $user['api_key'] . "'");
+                                                        $domainsCount = $domainsResult->fetch_row()[0];
+                                                        echo $domainsCount;
+                                                        ?></a></td>
                                                 <td class="text-center"><img src="<?= $user['avatar'] ?>"
                                                         style="height:20px;" class="img-circle">
                                                 </td>

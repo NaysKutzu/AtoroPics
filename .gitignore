@@ -2,10 +2,7 @@
 /apache/
 apache_stop.bat
 apache_start.bat
-/public/storage/json/*.json
-/public/storage/uploads/*.png
-/public/storage/uploads/*.jpng
-/public/storage/uploads/*.gif
+/public/storage/
 /public/db-manager
 /.vscode
 .env

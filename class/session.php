@@ -8,6 +8,7 @@ if (isset($_COOKIE['api_key'])) {
       $userdbd = $conn->query("SELECT * FROM atoropics_users WHERE api_key='$session_id'")->fetch_array();
       $_SESSION["api_key"] = $session_id;
       $_SESSION['loggedin'] = true;
+      $_SESSION['SESSION_EMAIL'] = $userdbd['email'];
       $_SESSION["email"] = $userdbd['email'];
       $_SESSION["username"] = $userdbd['username'];
   }

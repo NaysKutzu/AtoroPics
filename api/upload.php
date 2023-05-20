@@ -11,7 +11,6 @@ if (isset($_POST['api_key']))
         $desc = $userdb['embed_desc'];
         $desc_tit = $userdb['embed_title'];
         $embed_theme = $userdb['embed_theme'];
-        $site_name = $userdb['embed_sitename'];
         $small_title = $userdb['embed_small_title'];
         if(isset($_FILES['file'])){
             $file = $_FILES['file'];
@@ -46,7 +45,7 @@ if (isset($_POST['api_key']))
                         'description' => $desc,
                         'title' => $desc_tit,
                         'theme' => $embed_theme,
-                        'sitename' => $site_name,
+                        'sitename' => 'DISABLED',
                         'small_title' => $small_title,
                         'date' => $date,
                         'filesize' => $filesize
