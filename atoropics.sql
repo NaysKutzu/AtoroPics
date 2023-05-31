@@ -114,7 +114,7 @@ CREATE TABLE `atoropics_users` (
   `embed_small_title` text DEFAULT NULL,
   `embed_desc` text DEFAULT NULL,
   `embed_theme` text DEFAULT NULL,
-  `embed_sitename` text DEFAULT NULL,
+  `embed_domain` text DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 

@@ -1,8 +1,8 @@
 <?php
 require("../vendor/autoload.php");
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+ini_set('display_errors', 0);
+ini_set('display_startup_errors', 0);
+error_reporting(0);
 
 try {
     $router = new \Router\Router();
@@ -14,6 +14,16 @@ try {
             require("../view/index.php");
         } else {
           header('location: '.$settings['app_proto'].$settings['app_url']."/");  
+        }
+    });
+   
+    $router->add('/api/v2/stats', function() {
+        require("../index.php");
+        if ($_SERVER['HTTP_HOST'] == $settings['app_url'])
+        {
+            require("../api/v2/stats.php");
+        } else {
+          header('location: '.$settings['app_proto'].$settings['app_url']."/api/v2/stats");  
         }
     });
 
@@ -48,7 +58,7 @@ try {
           header('location: '.$settings['app_proto'].$settings['app_url']."/auth/logout");  
         }
     });
-
+    
     $router->add('/i', function() {
         require("../index.php");
         require("../view/image/imageEmbed.php");
